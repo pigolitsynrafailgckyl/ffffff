@@ -4,6 +4,321 @@ import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveCo
 import { Home, BarChart3, ShoppingBag, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw, AlertCircle, LogOut, CheckCircle, Star, Eye, ChevronRight, Search, Filter, ArrowUpRight, ArrowDownRight, Zap, Target, Activity, X, DollarSign, Layers, TrendingDown, Clock, ShoppingCart, Package, BarChart2 } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Strategy Detail Modal Component
+const StrategyDetailModal = ({ isOpen, onClose, nft, strategyData }) => {
+  const [buyAmount, setBuyAmount] = useState('');
+  const [activeTab, setActiveTab] = useState('holdings');
+  
+  if (!isOpen || !nft) return null;
+
+  const progressToNextBuy = 15.7; // % progress to next buyback
+  const ethNeeded = 0.067; // ETH needed to trigger buyback
+  const burnedPercent = 22.55;
+  const burnedTokens = 225495742;
+  
+  // Mock sales data
+  const salesHistory = [
+    { id: 2702, paid: 0.083, sold: 0.100, profit: 0.017 },
+    { id: 3655, paid: 0.084, sold: 0.101, profit: 0.017 },
+    { id: 9366, paid: 0.098, sold: 0.118, profit: 0.020 },
+    { id: 6283, paid: 0.110, sold: 0.132, profit: 0.022 },
+  ];
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center overflow-y-auto py-8 px-4"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 50, scale: 0.95 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl my-auto"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-100">
+            <div className="flex items-center gap-4">
+              <img src={nft.image} alt={nft.project} className="w-14 h-14 rounded-xl object-cover" />
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">FORMA Strategy</h2>
+                <p className="text-sm text-gray-500">$FORMA • Perpetual NFT Machine</p>
+              </div>
+            </div>
+            <button 
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-all"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+            
+            {/* Left Column - NFT Info & Chart */}
+            <div className="lg:col-span-2 space-y-5">
+              
+              {/* Token Price Section */}
+              <div className="bg-gray-50 rounded-2xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">$FORMA Price</p>
+                    <div className="flex items-center gap-3">
+                      <p className="text-3xl font-bold text-gray-900">$0.000400</p>
+                      <span className="text-sm font-medium text-emerald-500 bg-emerald-50 px-2 py-1 rounded-full">+3.23%</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">Market Cap</p>
+                    <p className="text-lg font-bold text-gray-900">$406.35K</p>
+                  </div>
+                </div>
+                
+                {/* Mini Stats */}
+                <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
+                  <div>
+                    <p className="text-xs text-gray-400">24h Volume</p>
+                    <p className="text-sm font-semibold text-gray-900">$405.00</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">Liquidity</p>
+                    <p className="text-sm font-semibold text-gray-900">$288.1K</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">Holders</p>
+                    <p className="text-sm font-semibold text-gray-900">943</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chart Placeholder */}
+              <div className="bg-gray-50 rounded-2xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-900">FORMA/ETH Chart</h3>
+                  <div className="flex gap-1">
+                    {['1h', '4h', 'D', 'W'].map(tf => (
+                      <button key={tf} className="px-3 py-1 text-xs font-medium text-gray-500 hover:bg-gray-200 rounded-full transition-all">
+                        {tf}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height={180}>
+                  <AreaChart data={strategyData?.history || []}>
+                    <defs>
+                      <linearGradient id="modalGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.2}/>
+                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '10px' }} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#9ca3af" style={{ fontSize: '10px' }} tickLine={false} axisLine={false} />
+                    <Area type="monotone" dataKey="floor" stroke="#10b981" strokeWidth={2} fill="url(#modalGradient)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Holdings & Sales Tabs */}
+              <div className="bg-gray-50 rounded-2xl overflow-hidden">
+                <div className="flex border-b border-gray-200">
+                  <button 
+                    onClick={() => setActiveTab('holdings')}
+                    className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${activeTab === 'holdings' ? 'bg-white text-gray-900 border-b-2 border-emerald-500' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    Holdings • {strategyData?.nft_supply?.strategy_owned || 148} NFTs
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('sales')}
+                    className={`flex-1 px-4 py-3 text-sm font-medium transition-all ${activeTab === 'sales' ? 'bg-white text-gray-900 border-b-2 border-emerald-500' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    Sales • {strategyData?.activity?.nft_sold_total || 312} Sold
+                  </button>
+                </div>
+                
+                <div className="p-4 max-h-64 overflow-y-auto">
+                  {activeTab === 'holdings' ? (
+                    <div className="grid grid-cols-4 gap-3">
+                      {strategyData?.nfts?.slice(0, 8).map((nft, idx) => (
+                        <div key={idx} className="bg-white rounded-xl p-2 border border-gray-100">
+                          <img src={nft.image} alt={`#${nft.token_id}`} className="w-full aspect-square object-cover rounded-lg mb-2" />
+                          <p className="text-xs font-bold text-gray-900">#{nft.token_id}</p>
+                          <p className="text-xs text-gray-500">{nft.price_eth} ETH</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {salesHistory.map((sale, idx) => (
+                        <div key={idx} className="flex items-center justify-between bg-white rounded-xl p-3 border border-gray-100">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+                            <div>
+                              <p className="text-sm font-bold text-gray-900">#{sale.id}</p>
+                              <p className="text-xs text-gray-500">Paid: {sale.paid} ETH</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-medium text-gray-900">{sale.sold} ETH</p>
+                            <p className="text-xs text-emerald-500 font-medium">+{sale.profit} ETH</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Buy Form & Stats */}
+            <div className="space-y-5">
+              
+              {/* Swap/Buy Form */}
+              <div className="bg-gray-50 rounded-2xl p-5">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">Swap</h3>
+                
+                {/* Selling */}
+                <div className="bg-white rounded-xl p-4 border border-gray-200 mb-3">
+                  <div className="flex justify-between text-xs text-gray-500 mb-2">
+                    <span>Selling</span>
+                    <span>Balance: 0.0000 ETH</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="number" 
+                      placeholder="0.0"
+                      value={buyAmount}
+                      onChange={(e) => setBuyAmount(e.target.value)}
+                      className="flex-1 text-2xl font-bold bg-transparent focus:outline-none"
+                    />
+                    <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full">
+                      <div className="w-5 h-5 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm font-medium">ETH</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Buying */}
+                <div className="bg-white rounded-xl p-4 border border-gray-200 mb-4">
+                  <div className="flex justify-between text-xs text-gray-500 mb-2">
+                    <span>Buying</span>
+                    <span>Balance: 0 FORMA</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="number" 
+                      placeholder="0.0"
+                      className="flex-1 text-2xl font-bold bg-transparent focus:outline-none"
+                      readOnly
+                    />
+                    <div className="flex items-center gap-2 bg-emerald-100 px-3 py-2 rounded-full">
+                      <div className="w-5 h-5 bg-emerald-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-emerald-700">FORMA</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-500 mb-4">Protocol fee: 10% on all swaps</p>
+
+                <button className="w-full bg-emerald-500 text-white py-3 rounded-full font-semibold hover:bg-emerald-600 transition-all hover:shadow-lg hover:shadow-emerald-500/25">
+                  Connect Wallet to Swap
+                </button>
+              </div>
+
+              {/* Fundings */}
+              <div className="bg-gray-50 rounded-2xl p-5">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">FORMA™ is currently holding</h3>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-gray-900">{strategyData?.treasury?.eth_balance || 24.73} ETH</p>
+                    <p className="text-xs text-gray-500">+ {strategyData?.nft_supply?.strategy_owned || 148} NFTs</p>
+                  </div>
+                </div>
+
+                {/* Cheapest on Market */}
+                <div className="bg-white rounded-xl p-4 border border-gray-200 mb-4">
+                  <p className="text-xs text-gray-500 mb-2">Cheapest NFT on Market</p>
+                  <div className="flex items-center gap-3">
+                    <img src={nft.image} className="w-12 h-12 rounded-lg object-cover" alt="Cheapest" />
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">#{nft.token_id}</p>
+                      <p className="text-lg font-bold text-emerald-500">{strategyData?.market?.floor_price_eth || 1.24} ETH</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Progress */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-xs text-gray-500 mb-2">
+                    <span>{progressToNextBuy}% Progress</span>
+                    <span>{strategyData?.nft_supply?.strategy_owned || 148} NFTs Held</span>
+                  </div>
+                  <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
+                      style={{ width: `${progressToNextBuy}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Burned */}
+              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-5 text-white">
+                <div className="flex items-center gap-2 mb-2">
+                  <Flame className="w-5 h-5" />
+                  <h3 className="text-sm font-semibold">$FORMA Burned</h3>
+                </div>
+                <p className="text-3xl font-bold mb-1">{burnedPercent}%</p>
+                <p className="text-sm opacity-80">of supply</p>
+                <p className="text-xs opacity-60 mt-2">{burnedTokens.toLocaleString()} tokens</p>
+              </div>
+
+              {/* Mechanics */}
+              <div className="bg-gray-50 rounded-2xl p-5">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">Mechanics</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="p-2 bg-emerald-100 rounded-lg h-fit">
+                      <ShoppingCart className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Buy</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        When the machine acquires the missing {ethNeeded} ETH, it will purchase the cheapest available listing from the market.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg h-fit">
+                      <DollarSign className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Sell</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Purchased NFTs are automatically relisted at 20% increase. Profits are distributed to protocol and liquidity providers.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button className="w-full mt-4 py-2.5 border border-gray-300 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-100 transition-all">
+                  Need {ethNeeded} more ETH
+                </button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 
 const StrategyMiniApp = () => {
   const [activeView, setActiveView] = useState('home'); // home, stats, nfts, leaderboard
