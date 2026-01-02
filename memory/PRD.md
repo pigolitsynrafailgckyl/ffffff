@@ -90,9 +90,9 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 
 ### P0 (Critical) - None remaining
 
-### P1 (High Priority)
-- Backend wallet authentication with JWT tokens
-- Store wallet sessions in MongoDB
+### P1 (High Priority) - Completed
+- ~~Backend JWT authentication for wallets~~ ✅
+- ~~Store wallet sessions in MongoDB~~ ✅
 
 ### P2 (Medium Priority) - Completed
 - ~~Transition from mock data to real API~~ ✅
@@ -101,8 +101,8 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 ### Future/Backlog
 - Full smart contract integration
 - Real NFT data from blockchain
-- User profile management
-- Transaction history from chain
+- User profile management with transaction history
+- Admin dashboard for strategy management
 
 ## Architecture
 ```
