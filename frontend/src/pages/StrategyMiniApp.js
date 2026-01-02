@@ -565,6 +565,12 @@ const StrategyMiniApp = () => {
     });
   };
 
+  // Modal functions
+  const openModal = (nft) => {
+    setSelectedNft(nft);
+    setIsModalOpen(true);
+  };
+
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'stats', icon: BarChart3, label: 'Stats' },
