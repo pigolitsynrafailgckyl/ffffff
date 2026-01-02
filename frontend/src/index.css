@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
 
 @tailwind base;
 @tailwind components;
@@ -9,14 +9,16 @@
     @apply border-border;
   }
   body {
-    @apply bg-white text-foreground font-sans;
+    @apply bg-white text-foreground;
+    font-family: 'Gilroy', -apple-system, BlinkMacSystemFont, sans-serif;
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-unbounded font-bold;
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 700;
   }
 }
 
