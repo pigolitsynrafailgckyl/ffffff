@@ -1125,13 +1125,16 @@ const NFTsView = ({ data, onNftClick }) => {
     const chains = ['Ethereum', 'Solana', 'BSC', 'Polygon'];
     const rounds = ['Strategic', 'Seed', 'Private', 'Public'];
     
+    // Use token_id for deterministic pseudo-random values
+    const seed = parseInt(nft.token_id) || idx;
+    
     return {
       ...nft,
       rarity: rarities[idx % 4],
       category: categories[idx % 4],
       chain: chains[idx % 4],
       round: rounds[idx % 4],
-      views: Math.floor(Math.random() * 2000) + 100,
+      views: (seed * 17 + 123) % 2000 + 100, // Deterministic "random" views
       project: `Project ${nft.token_id}`,
       priceUsd: (nft.price_eth * 3100).toFixed(0)
     };
