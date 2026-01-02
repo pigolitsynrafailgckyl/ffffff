@@ -17,7 +17,78 @@ const StrategyMiniApp = () => {
 
   useEffect(() => {
     calculateMetrics();
+    checkWalletConnection();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Check if wallet was previously connected
+  const checkWalletConnection = useCallback(async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+        }
+      } catch (err) {
+        console.error('Error checking wallet connection:', err);
+      }
+    }
+  }, []);
+
+  // Connect MetaMask wallet
+  const connectWallet = useCallback(async () => {
+    if (typeof window.ethereum === 'undefined') {
+      setWalletError('MetaMask не установлен. Пожалуйста, установите MetaMask.');
+      return;
+    }
+
+    setIsConnecting(true);
+    setWalletError(null);
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+
+      if (accounts.length > 0) {
+        setWalletAddress(accounts[0]);
+
+        // Listen for account changes
+        window.ethereum.on('accountsChanged', (newAccounts) => {
+          if (newAccounts.length === 0) {
+            setWalletAddress(null);
+          } else {
+            setWalletAddress(newAccounts[0]);
+          }
+        });
+
+        // Listen for chain changes
+        window.ethereum.on('chainChanged', () => {
+          window.location.reload();
+        });
+      }
+    } catch (err) {
+      if (err.code === 4001) {
+        setWalletError('Подключение отклонено пользователем.');
+      } else {
+        setWalletError('Ошибка подключения кошелька.');
+      }
+      console.error('Wallet connection error:', err);
+    } finally {
+      setIsConnecting(false);
+    }
+  }, []);
+
+  // Disconnect wallet
+  const disconnectWallet = useCallback(() => {
+    setWalletAddress(null);
+    setWalletError(null);
+  }, []);
+
+  // Format address for display
+  const formatAddress = useCallback((address) => {
+    if (!address) return '';
+    return `${address.substring(0, 6)}...${address.substring(38)}`;
+  }, []);
 
   const calculateMetrics = () => {
     const buybackProgress = Math.min(1, Math.max(0, data.treasury.eth_balance / data.treasury.target_eth_per_buyback));
