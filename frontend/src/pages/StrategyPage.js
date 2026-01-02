@@ -369,10 +369,10 @@ const StatsTab = ({ data }) => {
   );
 };
 
-// Stat Card (Sharp Design)
+// Stat Card (Rounded Design)
 const StatCard = ({ label, value, unit, subtitle }) => (
-  <div className="border border-zinc-800 p-4 hover:border-zinc-700 transition-colors">
-    <p className="text-xs text-zinc-500 mb-2">{label}</p>
+  <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-5 border border-zinc-800/50 hover:border-zinc-700 transition-all hover:shadow-lg hover:shadow-green-500/5">
+    <p className="text-xs text-zinc-500 mb-2 uppercase tracking-wide">{label}</p>
     <p className="text-2xl font-mono font-bold">
       {value}{unit && <span className="text-sm text-zinc-500 ml-1">{unit}</span>}
     </p>
@@ -380,32 +380,32 @@ const StatCard = ({ label, value, unit, subtitle }) => (
   </div>
 );
 
-// NFT Card (Sharp Design)
+// NFT Card (Rounded Design)
 const NFTCard = ({ nft, floorPrice }) => {
   const isBelowFloor = nft.price_eth < floorPrice;
   const discount = isBelowFloor ? ((floorPrice - nft.price_eth) / floorPrice) * 100 : 0;
 
   return (
-    <div className="border border-zinc-800 hover:border-zinc-700 transition-colors group">
-      <div className="aspect-square bg-zinc-900 overflow-hidden relative">
-        <img src={nft.image} alt={`NFT #${nft.token_id}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+    <div className="bg-zinc-900/70 backdrop-blur-sm rounded-xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700 transition-all group hover:shadow-lg hover:shadow-green-500/10">
+      <div className="aspect-square bg-zinc-800 overflow-hidden relative">
+        <img src={nft.image} alt={`NFT #${nft.token_id}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
         {nft.burn_candidate && (
-          <div className="absolute top-2 left-2">
-            <Flame className="w-4 h-4 text-orange-500" />
+          <div className="absolute top-3 left-3 bg-orange-500/90 backdrop-blur-sm rounded-lg p-1.5">
+            <Flame className="w-4 h-4 text-white" />
           </div>
         )}
       </div>
-      <div className="p-3 border-t border-zinc-800">
+      <div className="p-4 border-t border-zinc-800/50">
         <p className="text-xs font-mono text-zinc-500 mb-1">#{nft.token_id}</p>
-        <p className="font-mono font-bold">{nft.price_eth} ETH</p>
+        <p className="font-mono font-bold text-lg">{nft.price_eth} ETH</p>
         {isBelowFloor && (
-          <p className="text-xs text-green-500 mt-1">-{discount.toFixed(1)}% floor</p>
+          <p className="text-xs text-green-400 mt-1 bg-green-500/10 px-2 py-1 rounded-md inline-block">-{discount.toFixed(1)}% floor</p>
         )}
         <button
-          className={`w-full mt-2 py-2 text-xs font-medium transition-colors ${
+          className={`w-full mt-3 py-2.5 text-sm font-medium rounded-lg transition-all ${
             isBelowFloor
-              ? 'bg-green-500 text-black hover:bg-green-400'
-              : 'bg-zinc-900 text-zinc-600 cursor-not-allowed'
+              ? 'bg-green-500 text-black hover:bg-green-400 hover:shadow-lg hover:shadow-green-500/50'
+              : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
           }`}
           disabled={!isBelowFloor}
         >
