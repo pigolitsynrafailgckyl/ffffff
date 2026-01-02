@@ -45,39 +45,37 @@ const StrategyMiniApp = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="strategy-mini-app">
+    <div className="min-h-screen bg-gray-50 font-sans" data-testid="strategy-mini-app">
       {/* Top Navigation */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center shadow-sm">
                 <Flame className="w-5 h-5 text-white" />
               </div>
-              <span className="text-lg font-bold text-gray-900">FORMA Strategy</span>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <button
                     key={item.id}
                     onClick={() => setActiveView(item.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                       activeView === item.id
                         ? 'bg-gray-100 text-gray-900'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                     data-testid={`nav-${item.id}`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-[18px] h-[18px]" />
                     <span className="hidden sm:inline">{item.label}</span>
                   </button>
                 );
               })}
-              <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition-colors flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
+              <button className="bg-green-500 text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md ml-2">
                 Connect Wallet
               </button>
             </div>
