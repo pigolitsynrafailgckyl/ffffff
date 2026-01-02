@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,12 +9,19 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pycoingecko import CoinGeckoAPI
 import httpx
+import secrets
+from jose import jwt, JWTError
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# JWT Configuration
+JWT_SECRET = os.environ.get('JWT_SECRET', secrets.token_urlsafe(32))
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRATION_HOURS = 24
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -22,6 +30,9 @@ db = client[os.environ['DB_NAME']]
 
 # CoinGecko client
 cg = CoinGeckoAPI()
+
+# Security
+security = HTTPBearer(auto_error=False)
 
 # Create the main app without a prefix
 app = FastAPI(title="Forma Strategy API")
