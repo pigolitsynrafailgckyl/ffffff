@@ -432,9 +432,10 @@ const HomeView = ({ data, derived }) => {
           href="https://www.fomo.cx"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-green-500 text-white px-6 py-2.5 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md"
+          className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-600 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25"
         >
-          Go to FOMO.cx →
+          Go to FOMO.cx
+          <ExternalLink className="w-4 h-4 stroke-[1.5]" />
         </a>
       </div>
     </motion.div>
@@ -493,10 +494,10 @@ const CoinGeckoTerminal = () => {
   };
 
   return (
-    <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6" data-testid="coingecko-terminal">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6" data-testid="coingecko-terminal">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-green-600" />
+          <TrendingUp className="w-5 h-5 text-emerald-500 stroke-[1.5]" />
           <h3 className="text-sm font-semibold text-gray-900">Market Terminal</h3>
         </div>
         <div className="flex items-center gap-2">
