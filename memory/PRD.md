@@ -79,10 +79,9 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 - Backend wallet authentication with JWT tokens
 - Store wallet sessions in MongoDB
 
-### P2 (Medium Priority)
-- Transition from mock data to real smart contract data
-- Cleanup unused components from previous iterations
-- Connect frontend to backend APIs instead of static JSON
+### P2 (Medium Priority) - Completed
+- ~~Transition from mock data to real API~~ ✅
+- ~~Cleanup unused components from previous iterations~~ ✅
 
 ### Future/Backlog
 - Full smart contract integration
