@@ -633,86 +633,221 @@ const StatsView = ({ data, derived }) => {
   );
 };
 
-// NFTs View
+// NFTs View - Redesigned to match FOMO.cx style
 const NFTsView = ({ data }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [favorites, setFavorites] = useState([]);
+
+  // Enhanced NFT data with rarity and additional info
+  const enhancedNfts = data.nfts.map((nft, idx) => {
+    const rarities = ['Epic', 'Legendary', 'Rare', 'FOMO Gold'];
+    const categories = ['AI & Web3', 'NFT & Collectibles', 'DeFi', 'Gaming'];
+    const chains = ['Ethereum', 'Solana', 'BSC', 'Polygon'];
+    const rounds = ['Strategic', 'Seed', 'Private', 'Public'];
+    
+    return {
+      ...nft,
+      rarity: rarities[idx % 4],
+      category: categories[idx % 4],
+      chain: chains[idx % 4],
+      round: rounds[idx % 4],
+      views: Math.floor(Math.random() * 2000) + 100,
+      project: `Project ${nft.token_id}`,
+      priceUsd: (nft.price_eth * 3100).toFixed(0)
+    };
+  });
+
+  const toggleFavorite = (tokenId) => {
+    setFavorites(prev => 
+      prev.includes(tokenId) 
+        ? prev.filter(id => id !== tokenId)
+        : [...prev, tokenId]
+    );
+  };
+
+  const getRarityColor = (rarity) => {
+    const colors = {
+      'Epic': 'bg-red-500',
+      'Legendary': 'bg-purple-500',
+      'Rare': 'bg-blue-500',
+      'FOMO Gold': 'bg-amber-500'
+    };
+    return colors[rarity] || 'bg-gray-500';
+  };
+
+  const filteredNfts = enhancedNfts.filter(nft => {
+    if (searchQuery) {
+      return nft.project.toLowerCase().includes(searchQuery.toLowerCase()) ||
+             nft.token_id.toString().includes(searchQuery);
+    }
+    if (activeFilter === 'favorites') return favorites.includes(nft.token_id);
+    if (activeFilter === 'below-floor') return nft.price_eth < data.market.floor_price_eth;
+    return true;
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-5"
       data-testid="nfts-view"
     >
-      {/* CTA Banner */}
-      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-2">Buy NFTs on FOMO.cx</h3>
-        <p className="text-gray-600 text-sm mb-4 leading-relaxed">Explore our full marketplace with hundreds of NFTs</p>
-        <a
-          href="https://www.fomo.cx"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-600 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25"
-        >
-          Visit Marketplace
-          <ExternalLink className="w-4 h-4 stroke-[1.5]" />
-        </a>
-      </div>
-
-      {/* NFT Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {data.nfts.map((nft) => (
-          <div key={nft.token_id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 group">
-            <div className="overflow-hidden">
-              <img src={nft.image} alt={`NFT #${nft.token_id}`} className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" />
-            </div>
-            <div className="p-4">
-              <p className="text-xs text-gray-400 mb-1 font-medium">#{nft.token_id}</p>
-              <p className="text-base font-bold text-gray-900 mb-2">{nft.price_eth} ETH</p>
-              {nft.price_eth < data.market.floor_price_eth && (
-                <span className="inline-block text-xs bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full font-medium">Below Floor</span>
-              )}
-            </div>
+      {/* Search and Filters */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+        <div className="flex flex-col md:flex-row gap-4 items-center">
+          {/* Search */}
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 stroke-[1.5]" />
+            <input
+              type="text"
+              placeholder="Search by keywords"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+            />
           </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-};
-
-// Leaderboard View
-const LeaderboardView = () => {
-  const leaderboard = [
-    { rank: 1, name: 'Demo User', xp: 2650, badges: 3 },
-    { rank: 2, name: 'Demo User', xp: 510, badges: 2 },
-    { rank: 3, name: 'User 0x3c23', xp: 0, badges: 1 },
-    { rank: 4, name: 'User 0x974d', xp: 0, badges: 1 },
-    { rank: 5, name: 'User 0x578b', xp: 0, badges: 1 }
-  ];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-      data-testid="leaderboard-view"
-    >
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-5">Top Members</h3>
-        <div className="space-y-2">
-          {leaderboard.map((user) => (
-            <div key={user.rank} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200">
-              <span className="text-sm font-semibold text-gray-400 w-7">{user.rank}</span>
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-gray-500">{user.name.slice(0, 2).toUpperCase()}</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-400">{user.xp} XP</p>
-              </div>
-              <span className="text-sm font-semibold text-gray-500">{user.badges} <Trophy className="w-4 h-4 inline text-amber-400 stroke-[1.5]" /></span>
-            </div>
-          ))}
+          
+          {/* Filter Pills */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'below-floor', label: 'Below Floor' },
+              { id: 'favorites', label: 'Favorites' }
+            ].map(filter => (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  activeFilter === filter.id
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+            
+            <button className="p-2.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-200">
+              <Filter className="w-4 h-4 text-gray-600 stroke-[1.5]" />
+            </button>
+          </div>
+          
+          {/* CTA */}
+          <a
+            href="https://www.fomo.cx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-emerald-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-600 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25 whitespace-nowrap"
+          >
+            Visit FOMO.cx
+            <ExternalLink className="w-4 h-4 stroke-[1.5]" />
+          </a>
         </div>
       </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="bg-white rounded-xl p-4 border border-gray-100">
+          <p className="text-xs text-gray-400 mb-1">Floor Price</p>
+          <p className="text-lg font-bold text-gray-900">{data.market.floor_price_eth} ETH</p>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100">
+          <p className="text-xs text-gray-400 mb-1">Strategy Owned</p>
+          <p className="text-lg font-bold text-gray-900">{data.nft_supply.strategy_owned}</p>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100">
+          <p className="text-xs text-gray-400 mb-1">Below Floor</p>
+          <p className="text-lg font-bold text-emerald-500">{filteredNfts.filter(n => n.price_eth < data.market.floor_price_eth).length}</p>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100">
+          <p className="text-xs text-gray-400 mb-1">Total Burned</p>
+          <p className="text-lg font-bold text-orange-500">{data.nft_supply.burned}</p>
+        </div>
+      </div>
+
+      {/* NFT Grid - FOMO.cx Style */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {filteredNfts.map((nft) => (
+          <motion.div 
+            key={nft.token_id} 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer"
+          >
+            {/* Image Container */}
+            <div className="relative overflow-hidden aspect-square">
+              <img 
+                src={nft.image} 
+                alt={`NFT #${nft.token_id}`} 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+              />
+              
+              {/* Favorite Star - Top Left */}
+              <button 
+                onClick={(e) => { e.stopPropagation(); toggleFavorite(nft.token_id); }}
+                className="absolute top-3 left-3 p-2 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all"
+              >
+                <Star 
+                  className={`w-4 h-4 ${favorites.includes(nft.token_id) ? 'fill-amber-400 text-amber-400' : 'text-white'} stroke-[1.5]`}
+                />
+              </button>
+              
+              {/* Rarity Badge - Top Right */}
+              <div className={`absolute top-3 right-3 px-3 py-1 ${getRarityColor(nft.rarity)} text-white text-xs font-bold rounded-full`}>
+                {nft.rarity}
+              </div>
+            </div>
+            
+            {/* Card Content */}
+            <div className="p-4">
+              {/* NFT ID */}
+              <p className="text-xs text-gray-400 font-medium mb-1">#{nft.token_id}</p>
+              
+              {/* Project Name */}
+              <h4 className="text-sm font-bold text-gray-900 mb-1">{nft.project}</h4>
+              
+              {/* Category */}
+              <p className="text-xs text-gray-500 mb-3">{nft.category}</p>
+              
+              {/* Views */}
+              <div className="flex items-center gap-1 mb-3">
+                <Eye className="w-3.5 h-3.5 text-gray-400 stroke-[1.5]" />
+                <span className="text-xs text-gray-400">{nft.views >= 1000 ? `${(nft.views/1000).toFixed(1)}k` : nft.views}</span>
+              </div>
+              
+              {/* Round & Chain */}
+              <div className="flex items-center justify-between text-xs text-gray-500 mb-3 pb-3 border-b border-gray-100">
+                <div>
+                  <span className="text-gray-400">Round: </span>
+                  <span className="font-medium text-gray-700">{nft.round}</span>
+                </div>
+                <div>
+                  <span className="text-gray-400">Chain: </span>
+                  <span className="font-medium text-gray-700">{nft.chain}</span>
+                </div>
+              </div>
+              
+              {/* Price */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-lg font-bold text-gray-900">${nft.priceUsd}</p>
+                  <p className="text-xs text-gray-400">ETH {nft.price_eth}</p>
+                </div>
+                <button className="p-2 bg-gray-100 rounded-full hover:bg-emerald-500 hover:text-white transition-all duration-200 group/btn">
+                  <ChevronRight className="w-4 h-4 text-gray-600 group-hover/btn:text-white stroke-[1.5]" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      
+      {filteredNfts.length === 0 && (
+        <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+          <p className="text-gray-400">No NFTs found</p>
+        </div>
+      )}
     </motion.div>
   );
 };
