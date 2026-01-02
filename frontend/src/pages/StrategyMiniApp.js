@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
-import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp } from 'lucide-react';
+import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw } from 'lucide-react';
 import strategyData from '../data/strategy_state.json';
+import { ethers } from 'ethers';
 
 const StrategyMiniApp = () => {
   const [activeView, setActiveView] = useState('home'); // home, stats, nfts, leaderboard
