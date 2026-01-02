@@ -150,9 +150,45 @@ const StrategyMiniApp = () => {
                   </button>
                 );
               })}
-              <button className="bg-green-500 text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md ml-2">
-                Connect Wallet
-              </button>
+              
+              {/* Wallet Connect Button */}
+              {walletAddress ? (
+                <div className="flex items-center gap-2 ml-2">
+                  <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-3 py-2 rounded-md">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-green-800 font-mono">
+                      {formatAddress(walletAddress)}
+                    </span>
+                  </div>
+                  <button 
+                    onClick={disconnectWallet}
+                    className="text-gray-500 hover:text-gray-700 px-2 py-2 rounded-md hover:bg-gray-100 transition-all"
+                    title="Отключить кошелёк"
+                    data-testid="disconnect-wallet-btn"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={connectWallet}
+                  disabled={isConnecting}
+                  className="bg-green-500 text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md ml-2 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  data-testid="connect-wallet-btn"
+                >
+                  {isConnecting ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span className="hidden sm:inline">Connecting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Wallet className="w-4 h-4" />
+                      <span className="hidden sm:inline">Connect Wallet</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
