@@ -8,9 +8,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'unbounded': ['Unbounded', 'sans-serif'],
+        'gilroy': ['Gilroy', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        'sans': ['Gilroy', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         'mono': ['JetBrains Mono', 'monospace'],
-        'sans': ['Plus Jakarta Sans', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
