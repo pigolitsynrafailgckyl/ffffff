@@ -213,26 +213,26 @@ const StatsTab = ({ data }) => {
       </div>
 
       {/* Buyback Progress */}
-      <div className="border border-zinc-800 p-6 mb-8">
+      <div className="bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-zinc-800/50">
         <div className="flex justify-between items-center mb-4">
           <div>
             <h3 className="text-sm font-medium text-zinc-400">Progress to Next NFT Buyback</h3>
             <p className="text-xs text-zinc-600 mt-1">
               Status: {derived.buybackProgress >= 1 ? (
-                <span className="text-green-500">Buyback Ready</span>
+                <span className="text-green-400 bg-green-500/10 px-2 py-0.5 rounded-md">Buyback Ready</span>
               ) : (
-                <span className="text-yellow-500">Accumulating</span>
+                <span className="text-yellow-400 bg-yellow-500/10 px-2 py-0.5 rounded-md">Accumulating</span>
               )}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-mono font-bold">{derived.buybackProgressPercent}%</p>
+            <p className="text-3xl font-mono font-bold">{derived.buybackProgressPercent}%</p>
             <p className="text-xs text-zinc-500">{data.treasury.eth_balance} / {data.treasury.target_eth_per_buyback} ETH</p>
           </div>
         </div>
-        <div className="relative h-2 bg-zinc-900 border border-zinc-800">
+        <div className="relative h-3 bg-zinc-800 rounded-full overflow-hidden">
           <motion.div
-            className="absolute h-full bg-green-500"
+            className="absolute h-full bg-gradient-to-r from-green-600 to-green-400 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${derived.buybackProgressPercent}%` }}
             transition={{ duration: 1, ease: 'easeOut' }}
@@ -243,7 +243,7 @@ const StatsTab = ({ data }) => {
       {/* Market Analysis */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Market Gap */}
-        <div className="border border-zinc-800 p-6">
+        <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-6 border border-zinc-800/50">
           <h3 className="text-sm font-medium text-zinc-400 mb-4">Market Gap Analysis</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
@@ -258,7 +258,7 @@ const StatsTab = ({ data }) => {
               <div className="flex justify-between items-center">
                 <span className="text-xs text-zinc-500">Gap</span>
                 <div className="text-right">
-                  <p className={`font-mono font-bold ${derived.gapETH > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`font-mono font-bold ${derived.gapETH > 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {derived.gapETH > 0 ? '+' : ''}{derived.gapETH?.toFixed(3)} ETH
                   </p>
                   <p className="text-xs text-zinc-600">{derived.gapPercent?.toFixed(1)}%</p>
@@ -269,7 +269,7 @@ const StatsTab = ({ data }) => {
         </div>
 
         {/* NFT Supply */}
-        <div className="border border-zinc-800 p-6">
+        <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-6 border border-zinc-800/50">
           <h3 className="text-sm font-medium text-zinc-400 mb-4 flex items-center gap-2">
             NFT Supply Breakdown
           </h3>
@@ -298,7 +298,7 @@ const StatsTab = ({ data }) => {
         </div>
 
         {/* Market Depth */}
-        <div className="border border-zinc-800 p-6">
+        <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-6 border border-zinc-800/50">
           <h3 className="text-sm font-medium text-zinc-400 mb-4">Market Depth</h3>
           <div className="space-y-3">
             <div>
@@ -322,27 +322,27 @@ const StatsTab = ({ data }) => {
       </div>
 
       {/* Price Chart */}
-      <div className="border border-zinc-800 p-6 mb-8">
+      <div className="bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-zinc-800/50">
         <h3 className="text-sm font-medium text-zinc-400 mb-4">Price History</h3>
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={data.history}>
             <XAxis dataKey="date" stroke="#52525b" style={{ fontSize: '11px' }} />
             <YAxis stroke="#52525b" style={{ fontSize: '11px' }} />
             <RechartsTooltip
-              contentStyle={{ backgroundColor: '#000', border: '1px solid #27272a' }}
+              contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', borderRadius: '12px' }}
               labelStyle={{ color: '#71717a' }}
             />
-            <Line type="monotone" dataKey="floor" stroke="#3b82f6" strokeWidth={1.5} dot={false} name="Market Floor" />
-            <Line type="monotone" dataKey="strategy_buy" stroke="#10b981" strokeWidth={1.5} dot={false} name="Strategy Buy" />
+            <Line type="monotone" dataKey="floor" stroke="#3b82f6" strokeWidth={2} dot={false} name="Market Floor" />
+            <Line type="monotone" dataKey="strategy_buy" stroke="#10b981" strokeWidth={2} dot={false} name="Strategy Buy" />
           </LineChart>
         </ResponsiveContainer>
         <div className="flex items-center gap-6 mt-4 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 bg-blue-500"></div>
+            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
             <span className="text-zinc-500">Market Floor</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 bg-green-500"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             <span className="text-zinc-500">Strategy Buy</span>
           </div>
         </div>
@@ -359,9 +359,9 @@ const StatsTab = ({ data }) => {
       </div>
 
       {/* CoinGecko Terminal Placeholder */}
-      <div className="border border-zinc-800 p-6">
+      <div className="bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 border border-zinc-800/50">
         <h3 className="text-sm font-medium text-zinc-400 mb-4">Token Price Chart (CoinGecko)</h3>
-        <div className="flex items-center justify-center h-64 bg-zinc-900 border border-zinc-800">
+        <div className="flex items-center justify-center h-64 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
           <p className="text-zinc-600 text-sm">Connect CoinGecko API to display live token prices</p>
         </div>
       </div>
