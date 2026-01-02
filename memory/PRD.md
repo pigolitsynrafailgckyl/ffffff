@@ -145,6 +145,6 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 
 ## Known Limitations
 - **BACKEND DATA**: Strategy data now comes from backend API (default values if not in MongoDB)
-- **MOCKED**: Wallet connection doesn't persist sessions in DB yet
 - MetaMask testing requires browser extension
 - CoinGecko API may have rate limits (30 calls/min for free tier)
+- JWT token expires in 24 hours, requires re-authentication
