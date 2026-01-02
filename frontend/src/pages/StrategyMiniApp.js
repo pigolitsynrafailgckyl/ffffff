@@ -1113,7 +1113,7 @@ const StatsView = ({ data, derived }) => {
 };
 
 // NFTs View - Redesigned to match FOMO.cx style
-const NFTsView = ({ data }) => {
+const NFTsView = ({ data, onNftClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [favorites, setFavorites] = useState([]);
