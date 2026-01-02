@@ -1,0 +1,129 @@
+{
+  "identity": {
+    "name": "Forma Strategy",
+    "archetype": "Swiss Brutalism x Eco-Futurism",
+    "core_concept": "The Laboratory of Yield",
+    "emotional_tone": "Clinical, Profitable, Kinetic, Transparent",
+    "visual_principles": [
+      "Radical Clarity: White background, absolute contrast.",
+      "Data is Art: Numbers are the heroes, styled with monospaced precision.",
+      "Organic Signal: Green is not just a color, it's the pulse of the system.",
+      "Kinetic Urgency: Everything moves (tickers, counters) to signal a living economy."
+    ]
+  },
+  "typography": {
+    "headings": {
+      "family": "Unbounded, sans-serif",
+      "weights": ["700", "900"],
+      "usage": "Hero titles, Section headers, Big Metric Labels",
+      "letter_spacing": "-0.02em",
+      "transform": "uppercase"
+    },
+    "body": {
+      "family": "Plus Jakarta Sans, sans-serif",
+      "weights": ["400", "500"],
+      "usage": "Paragraphs, Explainer text, UI labels"
+    },
+    "mono": {
+      "family": "JetBrains Mono, monospace",
+      "weights": ["400", "700"],
+      "usage": "Prices, Token Addresses, Calculator Inputs, Transaction Hashes",
+      "feature_settings": "'zero' 1"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#FFFFFF",
+      "foreground": "#09090B",
+      "primary": "#10B981",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#F4F4F5",
+      "secondary_foreground": "#18181B",
+      "accent": "#10B981",
+      "accent_foreground": "#FFFFFF",
+      "border": "#000000",
+      "input": "#E4E4E7",
+      "ring": "#10B981"
+    },
+    "usage_rules": {
+      "background": "ALWAYS Pure White (#FFFFFF). No off-whites for main background.",
+      "text": "Main text is #09090B (Zinc 950). Muted text is #71717A (Zinc 500).",
+      "borders": "All structural borders must be #000000 (Black) or #E4E4E7 (Zinc 200) depending on hierarchy.",
+      "buttons": "Primary actions: Black bg + White text OR Green bg + Black text. Hover: Invert or offset shadow.",
+      "gradients": "FORBIDDEN. Use solid colors and patterns only."
+    }
+  },
+  "layout": {
+    "grid_system": {
+      "dashboard": "grid-cols-1 md:grid-cols-12 gap-4",
+      "gallery": "grid-cols-2 md:grid-cols-4 gap-6",
+      "hero": "grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+    },
+    "spacing": {
+      "container_padding": "p-6 md:p-12",
+      "section_gap": "gap-16 md:gap-24",
+      "element_gap": "gap-4"
+    },
+    "containers": {
+      "card_style": "bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none",
+      "panel_style": "bg-zinc-50 border border-zinc-200 rounded-lg p-6"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-black text-white hover:bg-green-500 hover:text-black transition-all duration-200 font-bold uppercase tracking-wide border-2 border-black shadow-[4px_4px_0px_0px_rgba(16,185,129,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none",
+      "secondary": "bg-white text-black border-2 border-black hover:bg-zinc-100 font-bold uppercase tracking-wide",
+      "ghost": "text-zinc-500 hover:text-black hover:bg-zinc-100"
+    },
+    "inputs": {
+      "style": "bg-white border-2 border-black text-lg font-mono focus:ring-0 focus:border-green-500 focus:shadow-[4px_4px_0px_0px_rgba(16,185,129,1)] transition-all placeholder:text-zinc-300"
+    },
+    "calculator": {
+      "wrapper": "bg-white border-2 border-black p-8 relative overflow-hidden",
+      "result_display": "font-mono text-4xl md:text-6xl font-bold text-green-600 tracking-tighter"
+    },
+    "marquee": {
+      "style": "bg-black text-white py-3 font-mono text-sm uppercase tracking-widest border-y-2 border-black",
+      "content": "LIVE TRANSACTIONS • BUYBACK EXECUTED • YIELD UPDATED • "
+    }
+  },
+  "motion": {
+    "principles": [
+      "Instant Feedback: Buttons snap, inputs focus immediately.",
+      "Constant Flow: Tickers and marquees never stop.",
+      "Data Live: Numbers count up, charts pulse."
+    ],
+    "animations": {
+      "hover_lift": "hover:-translate-y-1 transition-transform duration-200",
+      "marquee_scroll": "animate-marquee linear infinite",
+      "fade_in_up": "initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}"
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_abstract": "https://images.unsplash.com/photo-1764437358350-e324534072d7?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "strategy_visual": "https://images.unsplash.com/photo-1759270463164-dcd9af6fc77c?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "token_icon": "https://images.unsplash.com/photo-1759270463255-70ef839296bd?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "nft_placeholders": [
+        "https://images.unsplash.com/photo-1764437358350-e324534072d7?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.unsplash.com/photo-1759270463164-dcd9af6fc77c?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.unsplash.com/photo-1763920999620-f76ea1aeb3ac?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.unsplash.com/photo-1759270463255-70ef839296bd?crop=entropy&cs=srgb&fm=jpg&q=85"
+      ]
+    },
+    "icons": "Use 'lucide-react' for UI icons. Use 'phosphor-icons' (Bold weight) for feature highlights."
+  },
+  "instructions_to_main_agent": {
+    "general": "You are building a high-performance crypto mini-app. Speed and clarity are paramount. Do not use heavy blurs or glassmorphism. Use sharp lines and solid colors.",
+    "layout_strategy": "Use the 'Tetris Grid' for the landing page. Use the 'Control Room Grid' for the calculator/dashboard.",
+    "calculator_logic": "The calculator is the core feature. It must feel like a 'Simulation Engine'. When inputs change, animate the results. Show 'What If' scenarios.",
+    "web3_integration": "Mock the Web3 connection for now, but build the UI states (Connected, Disconnected, Wrong Network, Pending Transaction).",
+    "charts": "Use 'recharts'. Style them minimally: Black lines, Green areas, no grid lines, no axes labels unless necessary.",
+    "universal_guidelines": [
+      "NO DARK MODE. Force light mode classes.",
+      "NO GRADIENTS on buttons or backgrounds.",
+      "Use 'data-testid' on all interactive elements.",
+      "Ensure mobile responsiveness (stack grids to 1 column)."
+    ]
+  }
+}
