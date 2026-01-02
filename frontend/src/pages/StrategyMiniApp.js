@@ -379,9 +379,9 @@ const HomeView = ({ data, derived }) => {
       data-testid="home-view"
     >
       {/* Hero */}
-      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">FORMA Strategy</h1>
-        <p className="text-gray-600 leading-relaxed">NFT buyback and burn mechanism for sustainable value</p>
+        <p className="text-gray-500 leading-relaxed">NFT buyback and burn mechanism for sustainable value</p>
       </div>
 
       {/* Quick Stats */}
@@ -393,7 +393,7 @@ const HomeView = ({ data, derived }) => {
       </div>
 
       {/* Progress to Buyback */}
-      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
           <h3 className="text-sm font-semibold text-gray-900">Progress to Next Buyback</h3>
@@ -401,7 +401,7 @@ const HomeView = ({ data, derived }) => {
         </div>
         <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+            className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
             initial={{ width: "0%" }}
             animate={{ width: `${derived.buybackProgressPercent || 0}%` }}
             transition={{ duration: 1.2, ease: "easeOut" }}
@@ -411,9 +411,9 @@ const HomeView = ({ data, derived }) => {
       </div>
 
       {/* How It Works */}
-      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-2 mb-6">
-          <Info className="w-5 h-5 text-gray-600" />
+          <Info className="w-5 h-5 text-gray-400 stroke-[1.5]" />
           <h3 className="text-lg font-bold text-gray-900">How It Works</h3>
         </div>
         <div className="space-y-5">
@@ -425,9 +425,9 @@ const HomeView = ({ data, derived }) => {
       </div>
 
       {/* CTA */}
-      <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-md border border-green-200 p-6">
+      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-2">Join the Strategy</h3>
-        <p className="text-gray-700 text-sm mb-4 leading-relaxed">Start participating in the perpetual buyback machine</p>
+        <p className="text-gray-600 text-sm mb-4 leading-relaxed">Start participating in the perpetual buyback machine</p>
         <a
           href="https://www.fomo.cx"
           target="_blank"
