@@ -104,9 +104,9 @@ const HomeView = ({ data, derived }) => {
       data-testid="home-view"
     >
       {/* Hero */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">FORMA Strategy</h1>
-        <p className="text-gray-600">NFT buyback and burn mechanism for sustainable value</p>
+        <p className="text-gray-600 leading-relaxed">NFT buyback and burn mechanism for sustainable value</p>
       </div>
 
       {/* Quick Stats */}
@@ -118,30 +118,30 @@ const HomeView = ({ data, derived }) => {
       </div>
 
       {/* Progress to Buyback */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
           <h3 className="text-sm font-semibold text-gray-900">Progress to Next Buyback</h3>
-          <span className="text-xs text-gray-500 ml-auto">{derived.buybackProgressPercent}%</span>
+          <span className="text-sm text-gray-500 ml-auto font-medium">{derived.buybackProgressPercent}%</span>
         </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-green-500"
+            className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${derived.buybackProgressPercent}%` }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
           />
         </div>
-        <p className="text-xs text-gray-500 mt-2">{data.treasury.eth_balance} / {data.treasury.target_eth_per_buyback} ETH</p>
+        <p className="text-xs text-gray-500 mt-2 font-medium">{data.treasury.eth_balance} / {data.treasury.target_eth_per_buyback} ETH</p>
       </div>
 
       {/* How It Works */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center gap-2 mb-4">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center gap-2 mb-6">
           <Info className="w-5 h-5 text-gray-600" />
           <h3 className="text-lg font-bold text-gray-900">How It Works</h3>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-5">
           <Step number="1" title="Trade & Collect" description="Trading fees flow into treasury" />
           <Step number="2" title="Auto Buyback" description="Machine buys floor NFTs automatically" />
           <Step number="3" title="List & Burn" description="Proceeds burn $FORMA tokens" />
@@ -150,14 +150,14 @@ const HomeView = ({ data, derived }) => {
       </div>
 
       {/* CTA */}
-      <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200 p-6">
+      <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-md border border-green-200 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-2">Join the Strategy</h3>
-        <p className="text-gray-700 text-sm mb-4">Start participating in the perpetual buyback machine</p>
+        <p className="text-gray-700 text-sm mb-4 leading-relaxed">Start participating in the perpetual buyback machine</p>
         <a
           href="https://www.fomo.cx"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-green-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
+          className="inline-block bg-green-500 text-white px-6 py-2.5 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md"
         >
           Go to FOMO.cx →
         </a>
@@ -310,20 +310,20 @@ const LeaderboardView = () => {
 
 // Helper Components
 const StatCard = ({ label, value }) => (
-  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-    <p className="text-2xl font-bold text-gray-900">{value}</p>
-    <p className="text-xs text-gray-500 mt-1">{label}</p>
+  <div className="bg-white rounded-md shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+    <p className="text-3xl font-bold text-gray-900">{value}</p>
+    <p className="text-sm text-gray-500 mt-1">{label}</p>
   </div>
 );
 
 const Step = ({ number, title, description }) => (
-  <div className="flex gap-3">
-    <div className="flex-shrink-0 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+  <div className="flex gap-4 items-start">
+    <div className="flex-shrink-0 w-7 h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-sm">
       {number}
     </div>
-    <div>
-      <p className="text-sm font-medium text-gray-900">{title}</p>
-      <p className="text-xs text-gray-600">{description}</p>
+    <div className="flex-1">
+      <p className="text-sm font-semibold text-gray-900 mb-1">{title}</p>
+      <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
     </div>
   </div>
 );
