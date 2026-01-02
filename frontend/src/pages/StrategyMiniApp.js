@@ -1252,6 +1252,7 @@ const NFTsView = ({ data, onNftClick }) => {
             key={nft.token_id} 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
+            onClick={() => onNftClick && onNftClick(nft)}
             className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer"
           >
             {/* Image Container */}
