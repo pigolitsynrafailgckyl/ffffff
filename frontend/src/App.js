@@ -8,6 +8,7 @@ import { Calculator } from './components/Calculator';
 import { NFTGallery } from './components/NFTGallery';
 import { HowItWorks } from './components/HowItWorks';
 import { TransactionHistory } from './components/TransactionHistory';
+import StrategyDashboard from './pages/StrategyDashboard';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -95,20 +96,26 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Layout onConnectWallet={connectWallet} walletAddress={walletAddress}>
-          <Routes>
-            <Route 
-              path="/" 
-              element={
+        <Routes>
+          {/* Main landing page with layout */}
+          <Route 
+            path="/" 
+            element={
+              <Layout onConnectWallet={connectWallet} walletAddress={walletAddress}>
                 <Home 
                   statistics={statistics} 
                   walletAddress={walletAddress} 
                   onConnectWallet={connectWallet}
                 />
-              } 
-            />
-          </Routes>
-        </Layout>
+              </Layout>
+            } 
+          />
+          {/* Strategy Dashboard - standalone without main layout */}
+          <Route 
+            path="/dashboard" 
+            element={<StrategyDashboard />} 
+          />
+        </Routes>
       </BrowserRouter>
     </div>
   );
