@@ -177,33 +177,33 @@ const StatsView = ({ data, derived }) => {
     >
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <p className="text-xs text-gray-500 mb-1">ETH in Treasury</p>
-          <p className="text-2xl font-bold text-gray-900">{data.treasury.eth_balance} ETH</p>
+        <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+          <p className="text-xs text-gray-500 mb-2 font-medium">ETH in Treasury</p>
+          <p className="text-3xl font-bold text-gray-900">{data.treasury.eth_balance} ETH</p>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <p className="text-xs text-gray-500 mb-1">Market Gap</p>
-          <p className="text-2xl font-bold text-green-600">+{derived.gapETH?.toFixed(3)} ETH</p>
-          <p className="text-xs text-gray-500">{derived.gapPercent?.toFixed(1)}% below floor</p>
+        <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+          <p className="text-xs text-gray-500 mb-2 font-medium">Market Gap</p>
+          <p className="text-3xl font-bold text-green-600">+{derived.gapETH?.toFixed(3)} ETH</p>
+          <p className="text-xs text-gray-500 mt-1">{derived.gapPercent?.toFixed(1)}% below floor</p>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
-            <Flame className="w-3 h-3 text-orange-500" /> Burned
+        <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+          <p className="text-xs text-gray-500 mb-2 font-medium flex items-center gap-1">
+            <Flame className="w-3.5 h-3.5 text-orange-500" /> Burned
           </p>
-          <p className="text-2xl font-bold text-gray-900">{data.nft_supply.burned}</p>
-          <p className="text-xs text-gray-500">{derived.burnRatio?.toFixed(1)}% of supply</p>
+          <p className="text-3xl font-bold text-gray-900">{data.nft_supply.burned}</p>
+          <p className="text-xs text-gray-500 mt-1">{derived.burnRatio?.toFixed(1)}% of supply</p>
         </div>
       </div>
 
       {/* Price Chart */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Price History</h3>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={data.history}>
-            <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '10px' }} />
-            <YAxis stroke="#9ca3af" style={{ fontSize: '10px' }} />
+            <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '11px' }} />
+            <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }} />
             <RechartsTooltip
-              contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '12px', padding: '8px' }}
             />
             <Line type="monotone" dataKey="floor" stroke="#3b82f6" strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="strategy_buy" stroke="#10b981" strokeWidth={2} dot={false} />
@@ -212,13 +212,13 @@ const StatsView = ({ data, derived }) => {
       </div>
 
       {/* Orderbook */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Orderbook</h3>
-        <div className="space-y-2">
+        <div className="space-y-0 divide-y divide-gray-100">
           {data.orderbook.map((order, idx) => (
-            <div key={idx} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
-              <span className="text-sm text-gray-600">{order.price} ETH</span>
-              <span className="text-sm font-medium text-gray-900">{order.count} NFTs</span>
+            <div key={idx} className="flex justify-between items-center py-3 hover:bg-gray-50 transition-colors">
+              <span className="text-sm text-gray-600 font-medium">{order.price} ETH</span>
+              <span className="text-sm font-semibold text-gray-900">{order.count} NFTs</span>
             </div>
           ))}
         </div>
@@ -237,14 +237,14 @@ const NFTsView = ({ data }) => {
       data-testid="nfts-view"
     >
       {/* CTA Banner */}
-      <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200 p-6">
+      <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-md border border-green-200 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-2">Buy NFTs on FOMO.cx</h3>
-        <p className="text-gray-700 text-sm mb-4">Explore our full marketplace with hundreds of NFTs</p>
+        <p className="text-gray-700 text-sm mb-4 leading-relaxed">Explore our full marketplace with hundreds of NFTs</p>
         <a
           href="https://www.fomo.cx"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-green-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
+          className="inline-block bg-green-500 text-white px-6 py-2.5 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md"
         >
           Visit Marketplace →
         </a>
@@ -253,13 +253,13 @@ const NFTsView = ({ data }) => {
       {/* NFT Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {data.nfts.map((nft) => (
-          <div key={nft.token_id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+          <div key={nft.token_id} className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all">
             <img src={nft.image} alt={`NFT #${nft.token_id}`} className="w-full aspect-square object-cover" />
-            <div className="p-3">
-              <p className="text-xs text-gray-500">#{nft.token_id}</p>
-              <p className="text-sm font-bold text-gray-900">{nft.price_eth} ETH</p>
+            <div className="p-4">
+              <p className="text-xs text-gray-500 mb-1 font-medium">#{nft.token_id}</p>
+              <p className="text-base font-bold text-gray-900 mb-2">{nft.price_eth} ETH</p>
               {nft.price_eth < data.market.floor_price_eth && (
-                <span className="inline-block mt-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">Below Floor</span>
+                <span className="inline-block text-xs bg-green-100 text-green-700 px-2.5 py-1 rounded-md font-medium">Below Floor</span>
               )}
             </div>
           </div>
@@ -286,20 +286,20 @@ const LeaderboardView = () => {
       className="space-y-6"
       data-testid="leaderboard-view"
     >
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Top Members</h3>
-        <div className="space-y-3">
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-5">Top Members</h3>
+        <div className="space-y-2">
           {leaderboard.map((user) => (
-            <div key={user.rank} className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-              <span className="text-sm font-medium text-gray-500 w-6">{user.rank}</span>
+            <div key={user.rank} className="flex items-center gap-4 p-3 rounded-md hover:bg-gray-50 transition-colors">
+              <span className="text-sm font-semibold text-gray-500 w-7">{user.rank}</span>
               <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-gray-600">{user.name.slice(0, 2).toUpperCase()}</span>
+                <span className="text-sm font-semibold text-gray-600">{user.name.slice(0, 2).toUpperCase()}</span>
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                <p className="text-sm font-semibold text-gray-900">{user.name}</p>
                 <p className="text-xs text-gray-500">{user.xp} XP</p>
               </div>
-              <span className="text-xs font-medium text-gray-600">{user.badges} 🏆</span>
+              <span className="text-sm font-semibold text-gray-600">{user.badges} 🏆</span>
             </div>
           ))}
         </div>
