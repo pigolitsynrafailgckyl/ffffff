@@ -574,7 +574,8 @@ const StrategyMiniApp = () => {
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'stats', icon: BarChart3, label: 'Stats' },
-    { id: 'nfts', icon: ShoppingBag, label: 'NFTs' }
+    { id: 'nfts', icon: ShoppingBag, label: 'NFTs' },
+    { id: 'activities', icon: Activity, label: 'Activities' }
   ];
 
   return (
