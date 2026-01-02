@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: forma-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - forma-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: forma-backend
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=forma_strategy
+      - CORS_ORIGINS=*
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret-in-production}
+    depends_on:
+      - mongodb
+    networks:
+      - forma-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL:-http://localhost:8001}
+    container_name: forma-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - forma-network
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+
+networks:
+  forma-network:
+    driver: bridge
