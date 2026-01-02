@@ -8,7 +8,7 @@ import { Calculator } from './components/Calculator';
 import { NFTGallery } from './components/NFTGallery';
 import { HowItWorks } from './components/HowItWorks';
 import { TransactionHistory } from './components/TransactionHistory';
-import StrategyDashboard from './pages/StrategyDashboard';
+import StrategyPage from './pages/StrategyPage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -110,10 +110,10 @@ function App() {
               </Layout>
             } 
           />
-          {/* Strategy Dashboard - standalone without main layout */}
+          {/* Strategy Page - standalone without main layout */}
           <Route 
-            path="/dashboard" 
-            element={<StrategyDashboard />} 
+            path="/strategy" 
+            element={<StrategyPage />} 
           />
         </Routes>
       </BrowserRouter>

@@ -31,7 +31,7 @@ const Navbar = ({ onConnectWallet, walletAddress }) => {
           <a href="/#calculator" className="font-bold uppercase text-sm hover:text-green-500 transition-colors">Calculator</a>
           <a href="/#how-it-works" className="font-bold uppercase text-sm hover:text-green-500 transition-colors">How It Works</a>
           <a href="/#nfts" className="font-bold uppercase text-sm hover:text-green-500 transition-colors">NFTs</a>
-          <a href="/dashboard" className="font-bold uppercase text-sm hover:text-green-500 transition-colors">Dashboard</a>
+          <a href="/strategy" className="font-bold uppercase text-sm hover:text-green-500 transition-colors">Strategy</a>
           <button 
             onClick={onConnectWallet}
             data-testid="connect-wallet-button"
