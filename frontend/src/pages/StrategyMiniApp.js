@@ -232,10 +232,27 @@ const StrategyMiniApp = () => {
             {walletError}
           </div>
         )}
-        {activeView === 'home' && <HomeView data={data} derived={derived} />}
-        {activeView === 'stats' && <StatsView data={data} derived={derived} />}
-        {activeView === 'nfts' && <NFTsView data={data} />}
-        {activeView === 'leaderboard' && <LeaderboardView />}
+        {apiError && (
+          <div className="mb-4 bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-md text-sm flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            {apiError}
+            <button onClick={fetchStrategyData} className="ml-auto text-yellow-800 hover:text-yellow-900 underline text-sm">
+              Повторить
+            </button>
+          </div>
+        )}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <RefreshCw className="w-8 h-8 animate-spin text-gray-400" />
+          </div>
+        ) : data ? (
+          <>
+            {activeView === 'home' && <HomeView data={data} derived={derived} />}
+            {activeView === 'stats' && <StatsView data={data} derived={derived} />}
+            {activeView === 'nfts' && <NFTsView data={data} />}
+            {activeView === 'leaderboard' && <LeaderboardView />}
+          </>
+        ) : null}
       </main>
     </div>
   );
