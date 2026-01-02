@@ -652,22 +652,25 @@ const NFTsView = ({ data }) => {
           href="https://www.fomo.cx"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-green-500 text-white px-6 py-2.5 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md"
+          className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-600 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25"
         >
-          Visit Marketplace →
+          Visit Marketplace
+          <ExternalLink className="w-4 h-4 stroke-[1.5]" />
         </a>
       </div>
 
       {/* NFT Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {data.nfts.map((nft) => (
-          <div key={nft.token_id} className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all">
-            <img src={nft.image} alt={`NFT #${nft.token_id}`} className="w-full aspect-square object-cover" />
+          <div key={nft.token_id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-200 group">
+            <div className="overflow-hidden">
+              <img src={nft.image} alt={`NFT #${nft.token_id}`} className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" />
+            </div>
             <div className="p-4">
-              <p className="text-xs text-gray-500 mb-1 font-medium">#{nft.token_id}</p>
+              <p className="text-xs text-gray-400 mb-1 font-medium">#{nft.token_id}</p>
               <p className="text-base font-bold text-gray-900 mb-2">{nft.price_eth} ETH</p>
               {nft.price_eth < data.market.floor_price_eth && (
-                <span className="inline-block text-xs bg-green-100 text-green-700 px-2.5 py-1 rounded-md font-medium">Below Floor</span>
+                <span className="inline-block text-xs bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full font-medium">Below Floor</span>
               )}
             </div>
           </div>
@@ -694,20 +697,20 @@ const LeaderboardView = () => {
       className="space-y-6"
       data-testid="leaderboard-view"
     >
-      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-5">Top Members</h3>
         <div className="space-y-2">
           {leaderboard.map((user) => (
-            <div key={user.rank} className="flex items-center gap-4 p-3 rounded-md hover:bg-gray-50 transition-colors">
-              <span className="text-sm font-semibold text-gray-500 w-7">{user.rank}</span>
-              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-gray-600">{user.name.slice(0, 2).toUpperCase()}</span>
+            <div key={user.rank} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200">
+              <span className="text-sm font-semibold text-gray-400 w-7">{user.rank}</span>
+              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold text-gray-500">{user.name.slice(0, 2).toUpperCase()}</span>
               </div>
               <div className="flex-1">
                 <p className="text-sm font-semibold text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.xp} XP</p>
+                <p className="text-xs text-gray-400">{user.xp} XP</p>
               </div>
-              <span className="text-sm font-semibold text-gray-600">{user.badges} 🏆</span>
+              <span className="text-sm font-semibold text-gray-500">{user.badges} <Trophy className="w-4 h-4 inline text-amber-400 stroke-[1.5]" /></span>
             </div>
           ))}
         </div>
@@ -718,15 +721,15 @@ const LeaderboardView = () => {
 
 // Helper Components
 const StatCard = ({ label, value }) => (
-  <div className="bg-white rounded-md shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-all duration-200">
     <p className="text-3xl font-bold text-gray-900">{value}</p>
-    <p className="text-sm text-gray-500 mt-1">{label}</p>
+    <p className="text-sm text-gray-400 mt-1">{label}</p>
   </div>
 );
 
 const Step = ({ number, title, description }) => (
   <div className="flex gap-4 items-start">
-    <div className="flex-shrink-0 w-7 h-7 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-sm">
+    <div className="flex-shrink-0 w-7 h-7 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-sm">
       {number}
     </div>
     <div className="flex-1">
