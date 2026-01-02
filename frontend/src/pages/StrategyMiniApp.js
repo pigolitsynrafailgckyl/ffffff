@@ -50,10 +50,8 @@ const StrategyMiniApp = () => {
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center shadow-sm">
-                <Flame className="w-5 h-5 text-white" />
-              </div>
+            <div className="flex items-center">
+              <img src="/logo.svg" alt="FORMA Strategy" className="h-10" />
             </div>
             
             <div className="flex items-center gap-2">
