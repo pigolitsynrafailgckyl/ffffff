@@ -196,6 +196,11 @@ const StrategyMiniApp = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {walletError && (
+          <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+            {walletError}
+          </div>
+        )}
         {activeView === 'home' && <HomeView data={data} derived={derived} />}
         {activeView === 'stats' && <StatsView data={data} derived={derived} />}
         {activeView === 'nfts' && <NFTsView data={data} />}
