@@ -167,6 +167,156 @@ class CalculatorResult(BaseModel):
 async def root():
     return {"message": "Forma Strategy API"}
 
+# ============ JWT Helper Functions ============
+def create_jwt_token(wallet_address: str) -> str:
+    """Create JWT token for authenticated wallet"""
+    expires = datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    payload = {
+        "sub": wallet_address.lower(),
+        "exp": expires,
+        "iat": datetime.now(timezone.utc),
+        "type": "access"
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+def verify_jwt_token(token: str) -> Optional[str]:
+    """Verify JWT token and return wallet address"""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload.get("sub")
+    except JWTError:
+        return None
+
+async def get_current_wallet(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Optional[str]:
+    """Dependency to get current authenticated wallet"""
+    if not credentials:
+        return None
+    wallet_address = verify_jwt_token(credentials.credentials)
+    if wallet_address:
+        # Update last_active
+        await db.wallet_sessions.update_one(
+            {"wallet_address": wallet_address},
+            {"$set": {"last_active": datetime.now(timezone.utc).isoformat()}}
+        )
+    return wallet_address
+
+async def require_wallet(wallet: str = Depends(get_current_wallet)) -> str:
+    """Dependency that requires authenticated wallet"""
+    if not wallet:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return wallet
+
+def generate_nonce() -> str:
+    """Generate a random nonce for signing"""
+    return secrets.token_hex(16)
+
+def create_sign_message(wallet_address: str, nonce: str) -> str:
+    """Create message to be signed by wallet"""
+    return f"Sign this message to authenticate with Forma Strategy.\n\nWallet: {wallet_address}\nNonce: {nonce}"
+
+# ============ Wallet Auth Routes ============
+@api_router.post("/auth/nonce")
+async def get_auth_nonce(request: WalletConnectRequest):
+    """Get nonce for wallet to sign"""
+    wallet_address = request.wallet_address.lower()
+    nonce = generate_nonce()
+    message = create_sign_message(wallet_address, nonce)
+    
+    # Store nonce in DB (expires in 10 min)
+    await db.wallet_nonces.delete_many({"wallet_address": wallet_address})
+    await db.wallet_nonces.insert_one({
+        "wallet_address": wallet_address,
+        "nonce": nonce,
+        "message": message,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat()
+    })
+    
+    return {"nonce": nonce, "message": message}
+
+@api_router.post("/auth/verify", response_model=WalletAuthResponse)
+async def verify_wallet_signature(request: WalletVerifyRequest):
+    """Verify wallet signature and return JWT token"""
+    from eth_account.messages import encode_defunct
+    from eth_account import Account
+    
+    wallet_address = request.wallet_address.lower()
+    
+    # Get stored nonce
+    nonce_doc = await db.wallet_nonces.find_one({"wallet_address": wallet_address}, {"_id": 0})
+    
+    if not nonce_doc:
+        raise HTTPException(status_code=400, detail="No pending authentication. Request nonce first.")
+    
+    # Check expiration
+    expires_at = datetime.fromisoformat(nonce_doc["expires_at"])
+    if datetime.now(timezone.utc) > expires_at:
+        await db.wallet_nonces.delete_one({"wallet_address": wallet_address})
+        raise HTTPException(status_code=400, detail="Nonce expired. Request a new one.")
+    
+    # Verify signature
+    try:
+        message = encode_defunct(text=request.message)
+        recovered_address = Account.recover_message(message, signature=request.signature)
+        
+        if recovered_address.lower() != wallet_address:
+            raise HTTPException(status_code=401, detail="Invalid signature")
+    except Exception as e:
+        logger.error(f"Signature verification error: {e}")
+        raise HTTPException(status_code=401, detail="Invalid signature format")
+    
+    # Delete used nonce
+    await db.wallet_nonces.delete_one({"wallet_address": wallet_address})
+    
+    # Create or update wallet session
+    now = datetime.now(timezone.utc).isoformat()
+    await db.wallet_sessions.update_one(
+        {"wallet_address": wallet_address},
+        {
+            "$set": {"last_active": now, "is_active": True},
+            "$setOnInsert": {"created_at": now}
+        },
+        upsert=True
+    )
+    
+    # Generate JWT token
+    token = create_jwt_token(wallet_address)
+    
+    return WalletAuthResponse(
+        token=token,
+        wallet_address=wallet_address,
+        expires_in=JWT_EXPIRATION_HOURS * 3600
+    )
+
+@api_router.get("/auth/me", response_model=WalletProfile)
+async def get_wallet_profile(wallet: str = Depends(require_wallet)):
+    """Get current wallet profile"""
+    session = await db.wallet_sessions.find_one({"wallet_address": wallet}, {"_id": 0})
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Get wallet stats
+    tx_count = await db.transactions.count_documents({"wallet_address": wallet})
+    nft_count = await db.nfts.count_documents({"owner_address": wallet})
+    
+    return WalletProfile(
+        wallet_address=wallet,
+        created_at=datetime.fromisoformat(session["created_at"]) if isinstance(session["created_at"], str) else session["created_at"],
+        last_active=datetime.fromisoformat(session["last_active"]) if isinstance(session["last_active"], str) else session["last_active"],
+        total_transactions=tx_count,
+        nfts_owned=nft_count
+    )
+
+@api_router.post("/auth/logout")
+async def logout_wallet(wallet: str = Depends(require_wallet)):
+    """Logout wallet session"""
+    await db.wallet_sessions.update_one(
+        {"wallet_address": wallet},
+        {"$set": {"is_active": False}}
+    )
+    return {"message": "Logged out successfully"}
+
 # NFT Routes
 @api_router.get("/nfts", response_model=List[NFT])
 async def get_nfts(limit: int = 20):
