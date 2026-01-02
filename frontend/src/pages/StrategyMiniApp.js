@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
-import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw } from 'lucide-react';
-import strategyData from '../data/strategy_state.json';
-import { ethers } from 'ethers';
+import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw, AlertCircle } from 'lucide-react';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const StrategyMiniApp = () => {
   const [activeView, setActiveView] = useState('home'); // home, stats, nfts, leaderboard
-  const [data] = useState(strategyData);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [apiError, setApiError] = useState(null);
   const [derived, setDerived] = useState({});
   
   // MetaMask wallet state
@@ -15,10 +17,37 @@ const StrategyMiniApp = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [walletError, setWalletError] = useState(null);
 
+  // Fetch strategy data from backend API
+  const fetchStrategyData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setApiError(null);
+      const response = await fetch(`${BACKEND_URL}/api/strategy/state`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch strategy data');
+      }
+      
+      const strategyData = await response.json();
+      setData(strategyData);
+    } catch (err) {
+      console.error('Error fetching strategy data:', err);
+      setApiError('Не удалось загрузить данные стратегии');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    calculateMetrics();
+    fetchStrategyData();
     checkWalletConnection();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (data) {
+      calculateMetrics();
+    }
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Check if wallet was previously connected
   const checkWalletConnection = useCallback(async () => {
