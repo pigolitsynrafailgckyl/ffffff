@@ -263,21 +263,21 @@ const StrategyMiniApp = () => {
               <img src="/logo.svg" alt="FORMA Strategy" className="h-10" />
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <button
                     key={item.id}
                     onClick={() => setActiveView(item.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
                       activeView === item.id
                         ? 'bg-gray-100 text-gray-900'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                     }`}
                     data-testid={`nav-${item.id}`}
                   >
-                    <Icon className="w-[18px] h-[18px]" />
+                    <Icon className="w-[18px] h-[18px] stroke-[1.5]" />
                     <span className="hidden sm:inline">{item.label}</span>
                   </button>
                 );
@@ -285,47 +285,47 @@ const StrategyMiniApp = () => {
               
               {/* Wallet Connect Button */}
               {walletAddress ? (
-                <div className="flex items-center gap-2 ml-2">
-                  <div className={`flex items-center gap-2 px-3 py-2 rounded-md border ${
+                <div className="flex items-center gap-2 ml-3">
+                  <div className={`flex items-center gap-2 px-4 py-2.5 rounded-full border ${
                     isAuthenticated 
-                      ? 'bg-green-50 border-green-200' 
-                      : 'bg-yellow-50 border-yellow-200'
+                      ? 'bg-emerald-50 border-emerald-200' 
+                      : 'bg-amber-50 border-amber-200'
                   }`}>
                     {isAuthenticated ? (
-                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <CheckCircle className="w-4 h-4 text-emerald-600 stroke-[1.5]" />
                     ) : (
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
                     )}
                     <span className={`text-sm font-medium font-mono ${
-                      isAuthenticated ? 'text-green-800' : 'text-yellow-800'
+                      isAuthenticated ? 'text-emerald-700' : 'text-amber-700'
                     }`}>
                       {formatAddress(walletAddress)}
                     </span>
                   </div>
                   <button 
                     onClick={disconnectWallet}
-                    className="text-gray-500 hover:text-red-600 px-2 py-2 rounded-md hover:bg-red-50 transition-all"
+                    className="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-red-50 transition-all duration-200"
                     title="Отключить кошелёк"
                     data-testid="disconnect-wallet-btn"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-4 h-4 stroke-[1.5]" />
                   </button>
                 </div>
               ) : (
                 <button 
                   onClick={connectWallet}
                   disabled={isConnecting}
-                  className="bg-green-500 text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-green-600 transition-all shadow-sm hover:shadow-md ml-2 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-emerald-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-600 transition-all duration-200 ml-3 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-emerald-500/25"
                   data-testid="connect-wallet-btn"
                 >
                   {isConnecting ? (
                     <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <RefreshCw className="w-4 h-4 animate-spin stroke-[1.5]" />
                       <span className="hidden sm:inline">Connecting...</span>
                     </>
                   ) : (
                     <>
-                      <Wallet className="w-4 h-4" />
+                      <Wallet className="w-4 h-4 stroke-[1.5]" />
                       <span className="hidden sm:inline">Connect Wallet</span>
                     </>
                   )}
