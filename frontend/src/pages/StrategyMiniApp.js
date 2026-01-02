@@ -9,6 +9,11 @@ const StrategyMiniApp = () => {
   const [activeView, setActiveView] = useState('home'); // home, stats, nfts, leaderboard
   const [data] = useState(strategyData);
   const [derived, setDerived] = useState({});
+  
+  // MetaMask wallet state
+  const [walletAddress, setWalletAddress] = useState(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [walletError, setWalletError] = useState(null);
 
   useEffect(() => {
     calculateMetrics();
