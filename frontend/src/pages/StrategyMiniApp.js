@@ -189,13 +189,30 @@ const StrategyMiniApp = () => {
     } finally {
       setIsConnecting(false);
     }
-  }, []);
+  }, [authenticateWallet, walletAddress]);
 
   // Disconnect wallet
-  const disconnectWallet = useCallback(() => {
+  const disconnectWallet = useCallback(async () => {
+    // Logout from backend
+    if (authToken) {
+      try {
+        await fetch(`${BACKEND_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+    }
+    
+    // Clear local state
     setWalletAddress(null);
     setWalletError(null);
-  }, []);
+    setAuthToken(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('forma_auth_token');
+    localStorage.removeItem('forma_wallet_address');
+  }, [authToken]);
 
   // Format address for display
   const formatAddress = useCallback((address) => {
