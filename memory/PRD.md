@@ -123,7 +123,11 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 ```
 
 ## Key API Endpoints (Backend)
-- GET /api/strategy/state - Full strategy state for mini-app (NEW)
+- GET /api/strategy/state - Full strategy state for mini-app
+- POST /api/auth/nonce - Get nonce for wallet signature
+- POST /api/auth/verify - Verify signature and get JWT token
+- GET /api/auth/me - Get authenticated wallet profile (requires JWT)
+- POST /api/auth/logout - Logout wallet session (requires JWT)
 - GET /api/stats - Strategy statistics
 - GET /api/nfts - NFT listings
 - GET /api/transactions - Transaction history
