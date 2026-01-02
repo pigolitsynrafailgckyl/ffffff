@@ -44,7 +44,15 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 
 ## What's Been Implemented
 
-### January 2, 2026
+### January 2, 2026 (Session 2 - P2)
+- ✅ **Backend API Integration**: Frontend now fetches data from `/api/strategy/state` instead of static JSON
+- ✅ **Cleanup**: Removed unused files:
+  - `/app/frontend/src/pages/StrategyDashboard.js`
+  - `/app/frontend/src/pages/StrategyPage.js`
+  - `/app/frontend/src/data/strategy_state.json`
+- ✅ **Loading/Error States**: Added loading spinner and error handling with retry button
+
+### January 2, 2026 (Session 1 - P0-P1)
 - ✅ **P0 - Logo Implementation**: Official FOMO logo without container box
 - ✅ **P1 - MetaMask Wallet Connection**: 
   - Connect/Disconnect functionality
