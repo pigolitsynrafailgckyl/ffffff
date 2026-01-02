@@ -686,6 +686,7 @@ const StrategyMiniApp = () => {
             {activeView === 'home' && <HomeView data={data} derived={derived} />}
             {activeView === 'stats' && <StatsView data={data} derived={derived} />}
             {activeView === 'nfts' && <NFTsView data={data} onNftClick={openModal} />}
+            {activeView === 'activities' && <ActivitiesView />}
           </>
         ) : null}
       </main>
