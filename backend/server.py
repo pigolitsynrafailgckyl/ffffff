@@ -86,6 +86,45 @@ class Statistics(BaseModel):
     total_burned: int
     treasury_balance: float
 
+# Wallet Authentication Models
+class WalletNonce(BaseModel):
+    """Nonce for wallet signature verification"""
+    wallet_address: str
+    nonce: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc) + timedelta(minutes=10))
+
+class WalletSession(BaseModel):
+    """Wallet session stored in DB"""
+    wallet_address: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_active: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    is_active: bool = True
+
+class WalletConnectRequest(BaseModel):
+    """Request to get nonce for wallet connection"""
+    wallet_address: str
+
+class WalletVerifyRequest(BaseModel):
+    """Request to verify wallet signature"""
+    wallet_address: str
+    signature: str
+    message: str
+
+class WalletAuthResponse(BaseModel):
+    """Response with JWT token after successful verification"""
+    token: str
+    wallet_address: str
+    expires_in: int  # seconds
+
+class WalletProfile(BaseModel):
+    """User profile based on wallet"""
+    wallet_address: str
+    created_at: datetime
+    last_active: datetime
+    total_transactions: int = 0
+    nfts_owned: int = 0
+
 class StrategyState(BaseModel):
     """Full strategy state for mini-app"""
     timestamp: int
