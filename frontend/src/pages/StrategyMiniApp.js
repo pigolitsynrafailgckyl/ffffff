@@ -120,6 +120,8 @@ const StrategyMiniApp = () => {
   }, []);
 
   const calculateMetrics = () => {
+    if (!data) return;
+    
     const buybackProgress = Math.min(1, Math.max(0, data.treasury.eth_balance / data.treasury.target_eth_per_buyback));
     const buybackProgressPercent = (buybackProgress * 100).toFixed(1);
     const gapETH = data.market.floor_price_eth - data.market.strategy_avg_buy_price;
