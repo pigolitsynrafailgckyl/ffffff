@@ -9,9 +9,9 @@ const StrategyPage = () => {
   const [data] = useState(strategyData);
 
   return (
-    <div className="min-h-screen bg-black text-white" data-testid="strategy-page">
+    <div className="min-h-screen bg-zinc-950 text-white" data-testid="strategy-page">
       {/* Header */}
-      <header className="border-b border-zinc-800">
+      <header className="border-b border-zinc-800/50 bg-zinc-900/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -20,7 +20,7 @@ const StrategyPage = () => {
               </h1>
               <p className="text-xs text-zinc-500 mt-1">Perpetual NFT Machine</p>
             </div>
-            <a href="/" className="text-sm hover:text-green-500 transition-colors border border-zinc-800 px-4 py-2 hover:border-green-500">
+            <a href="/" className="text-sm hover:text-green-500 transition-colors border border-zinc-700 px-4 py-2 rounded-lg hover:border-green-500 hover:bg-green-500/10">
               ← Back to Home
             </a>
           </div>
@@ -28,15 +28,15 @@ const StrategyPage = () => {
       </header>
 
       {/* Tabs */}
-      <div className="border-b border-zinc-800">
+      <div className="border-b border-zinc-800/50 bg-zinc-900/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex gap-0">
+          <div className="flex gap-2">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
+              className={`px-6 py-3 text-sm font-medium transition-all rounded-t-lg ${
                 activeTab === 'overview' 
-                  ? 'border-green-500 text-green-500' 
-                  : 'border-transparent text-zinc-400 hover:text-white'
+                  ? 'bg-zinc-900 text-green-500 border-t-2 border-green-500' 
+                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
               }`}
               data-testid="overview-tab"
             >
@@ -44,10 +44,10 @@ const StrategyPage = () => {
             </button>
             <button
               onClick={() => setActiveTab('stats')}
-              className={`px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
+              className={`px-6 py-3 text-sm font-medium transition-all rounded-t-lg ${
                 activeTab === 'stats' 
-                  ? 'border-green-500 text-green-500' 
-                  : 'border-transparent text-zinc-400 hover:text-white'
+                  ? 'bg-zinc-900 text-green-500 border-t-2 border-green-500' 
+                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
               }`}
               data-testid="stats-tab"
             >
