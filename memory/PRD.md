@@ -44,6 +44,21 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 
 ## What's Been Implemented
 
+### January 2, 2026 (Session 3 - P1)
+- ✅ **JWT Authentication for Wallets**:
+  - `POST /api/auth/nonce` - Get nonce for wallet to sign
+  - `POST /api/auth/verify` - Verify signature and return JWT token
+  - `GET /api/auth/me` - Get authenticated wallet profile
+  - `POST /api/auth/logout` - Logout wallet session
+  - Token stored in localStorage with 24h expiration
+  - Session stored in MongoDB `wallet_sessions` collection
+- ✅ **Frontend Auth Integration**:
+  - Sign message with MetaMask using personal_sign
+  - Store JWT token in localStorage
+  - Auto-restore session on page reload
+  - Visual indicator for authenticated state (green checkmark)
+  - Account change detection with re-authentication
+
 ### January 2, 2026 (Session 2 - P2)
 - ✅ **Backend API Integration**: Frontend now fetches data from `/api/strategy/state` instead of static JSON
 - ✅ **Cleanup**: Removed unused files:
