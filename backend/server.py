@@ -75,6 +75,19 @@ class Statistics(BaseModel):
     total_burned: int
     treasury_balance: float
 
+class StrategyState(BaseModel):
+    """Full strategy state for mini-app"""
+    timestamp: int
+    treasury: dict
+    nft_supply: dict
+    activity: dict
+    market: dict
+    liquidity: dict
+    distribution: dict
+    orderbook: List[dict]
+    history: List[dict]
+    nfts: List[dict]
+
 class CalculatorInput(BaseModel):
     nft_price: float
     time_horizon: int  # days
