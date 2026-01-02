@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
-import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw, AlertCircle } from 'lucide-react';
+import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw, AlertCircle, LogOut, CheckCircle } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -16,13 +16,16 @@ const StrategyMiniApp = () => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [walletError, setWalletError] = useState(null);
+  const [authToken, setAuthToken] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Fetch strategy data from backend API
   const fetchStrategyData = useCallback(async () => {
     try {
       setIsLoading(true);
       setApiError(null);
-      const response = await fetch(`${BACKEND_URL}/api/strategy/state`);
+      const headers = authToken ? { 'Authorization': `Bearer ${authToken}` } : {};
+      const response = await fetch(`${BACKEND_URL}/api/strategy/state`, { headers });
       
       if (!response.ok) {
         throw new Error('Failed to fetch strategy data');
@@ -36,11 +39,19 @@ const StrategyMiniApp = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [authToken]);
 
   useEffect(() => {
     fetchStrategyData();
     checkWalletConnection();
+    // Check for saved auth token
+    const savedToken = localStorage.getItem('forma_auth_token');
+    const savedWallet = localStorage.getItem('forma_wallet_address');
+    if (savedToken && savedWallet) {
+      setAuthToken(savedToken);
+      setWalletAddress(savedWallet);
+      setIsAuthenticated(true);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -54,12 +65,73 @@ const StrategyMiniApp = () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-          setWalletAddress(accounts[0]);
+        if (accounts.length > 0 && !walletAddress) {
+          // Only set address if not already authenticated
+          const savedWallet = localStorage.getItem('forma_wallet_address');
+          if (!savedWallet) {
+            setWalletAddress(accounts[0]);
+          }
         }
       } catch (err) {
         console.error('Error checking wallet connection:', err);
       }
+    }
+  }, [walletAddress]);
+
+  // Authenticate with backend using signature
+  const authenticateWallet = useCallback(async (address) => {
+    try {
+      // Step 1: Get nonce from backend
+      const nonceResponse = await fetch(`${BACKEND_URL}/api/auth/nonce`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet_address: address })
+      });
+      
+      if (!nonceResponse.ok) {
+        throw new Error('Failed to get nonce');
+      }
+      
+      const { message } = await nonceResponse.json();
+      
+      // Step 2: Sign message with MetaMask
+      const signature = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [message, address]
+      });
+      
+      // Step 3: Verify signature with backend
+      const verifyResponse = await fetch(`${BACKEND_URL}/api/auth/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          wallet_address: address,
+          signature: signature,
+          message: message
+        })
+      });
+      
+      if (!verifyResponse.ok) {
+        throw new Error('Signature verification failed');
+      }
+      
+      const { token, wallet_address } = await verifyResponse.json();
+      
+      // Save token and wallet
+      localStorage.setItem('forma_auth_token', token);
+      localStorage.setItem('forma_wallet_address', wallet_address);
+      setAuthToken(token);
+      setIsAuthenticated(true);
+      
+      return true;
+    } catch (err) {
+      console.error('Authentication error:', err);
+      if (err.code === 4001) {
+        setWalletError('Подпись отклонена пользователем.');
+      } else {
+        setWalletError('Ошибка аутентификации.');
+      }
+      return false;
     }
   }, []);
 
@@ -79,21 +151,33 @@ const StrategyMiniApp = () => {
       });
 
       if (accounts.length > 0) {
-        setWalletAddress(accounts[0]);
+        const address = accounts[0];
+        setWalletAddress(address);
 
-        // Listen for account changes
-        window.ethereum.on('accountsChanged', (newAccounts) => {
-          if (newAccounts.length === 0) {
-            setWalletAddress(null);
-          } else {
-            setWalletAddress(newAccounts[0]);
-          }
-        });
+        // Authenticate with backend
+        const authenticated = await authenticateWallet(address);
+        
+        if (authenticated) {
+          // Listen for account changes
+          window.ethereum.on('accountsChanged', async (newAccounts) => {
+            if (newAccounts.length === 0) {
+              disconnectWallet();
+            } else if (newAccounts[0].toLowerCase() !== walletAddress?.toLowerCase()) {
+              // New account - re-authenticate
+              setWalletAddress(newAccounts[0]);
+              setIsAuthenticated(false);
+              setAuthToken(null);
+              localStorage.removeItem('forma_auth_token');
+              localStorage.removeItem('forma_wallet_address');
+              await authenticateWallet(newAccounts[0]);
+            }
+          });
 
-        // Listen for chain changes
-        window.ethereum.on('chainChanged', () => {
-          window.location.reload();
-        });
+          // Listen for chain changes
+          window.ethereum.on('chainChanged', () => {
+            window.location.reload();
+          });
+        }
       }
     } catch (err) {
       if (err.code === 4001) {
