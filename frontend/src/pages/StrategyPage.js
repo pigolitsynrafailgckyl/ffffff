@@ -87,66 +87,66 @@ const OverviewTab = () => {
         </p>
 
         {/* How it works */}
-        <div className="space-y-8">
-          <div className="border border-zinc-800 p-6">
-            <div className="flex items-start gap-4">
-              <div className="bg-green-500 text-black font-bold px-3 py-1 text-sm">01</div>
+        <div className="space-y-6">
+          <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-2xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-colors">
+            <div className="flex items-start gap-6">
+              <div className="bg-green-500 text-black font-bold px-4 py-2 rounded-lg text-lg">01</div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">Trade & Collect Fees</h3>
-                <p className="text-zinc-400">Every NFT trade generates fees that flow into the protocol treasury. This creates a continuous revenue stream independent of market conditions.</p>
+                <h3 className="text-xl font-bold mb-3">Trade & Collect Fees</h3>
+                <p className="text-zinc-400 leading-relaxed">Every NFT trade generates fees that flow into the protocol treasury. This creates a continuous revenue stream independent of market conditions.</p>
               </div>
             </div>
           </div>
 
-          <div className="border border-zinc-800 p-6">
-            <div className="flex items-start gap-4">
-              <div className="bg-green-500 text-black font-bold px-3 py-1 text-sm">02</div>
+          <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-2xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-colors">
+            <div className="flex items-start gap-6">
+              <div className="bg-green-500 text-black font-bold px-4 py-2 rounded-lg text-lg">02</div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">Automated Buyback</h3>
-                <p className="text-zinc-400">When treasury reaches threshold (3 ETH), the machine automatically buys floor NFTs. This provides natural price support and accumulates strategic assets.</p>
+                <h3 className="text-xl font-bold mb-3">Automated Buyback</h3>
+                <p className="text-zinc-400 leading-relaxed">When treasury reaches threshold (3 ETH), the machine automatically buys floor NFTs. This provides natural price support and accumulates strategic assets.</p>
               </div>
             </div>
           </div>
 
-          <div className="border border-zinc-800 p-6">
-            <div className="flex items-start gap-4">
-              <div className="bg-green-500 text-black font-bold px-3 py-1 text-sm">03</div>
+          <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-2xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-colors">
+            <div className="flex items-start gap-6">
+              <div className="bg-green-500 text-black font-bold px-4 py-2 rounded-lg text-lg">03</div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">List & Burn</h3>
-                <p className="text-zinc-400">Acquired NFTs are listed at 1.2x price. When sold, proceeds buy and burn $FORMA tokens, reducing supply and creating upward pressure on price.</p>
+                <h3 className="text-xl font-bold mb-3">List & Burn</h3>
+                <p className="text-zinc-400 leading-relaxed">Acquired NFTs are listed at 1.2x price. When sold, proceeds buy and burn $FORMA tokens, reducing supply and creating upward pressure on price.</p>
               </div>
             </div>
           </div>
 
-          <div className="border border-zinc-800 p-6">
-            <div className="flex items-start gap-4">
-              <div className="bg-green-500 text-black font-bold px-3 py-1 text-sm">04</div>
+          <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-2xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-colors">
+            <div className="flex items-start gap-6">
+              <div className="bg-green-500 text-black font-bold px-4 py-2 rounded-lg text-lg">04</div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">Supply Reduction</h3>
-                <p className="text-zinc-400">Continuous token burning reduces circulating supply. Combined with NFT buybacks, this creates a virtuous cycle of value accrual for both assets.</p>
+                <h3 className="text-xl font-bold mb-3">Supply Reduction</h3>
+                <p className="text-zinc-400 leading-relaxed">Continuous token burning reduces circulating supply. Combined with NFT buybacks, this creates a virtuous cycle of value accrual for both assets.</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Value Proposition */}
-        <div className="mt-12 border border-green-500/20 bg-green-500/5 p-8">
-          <h3 className="text-2xl font-bold mb-4 text-green-500">Why This Works</h3>
-          <ul className="space-y-3 text-zinc-300">
+        <div className="mt-12 bg-gradient-to-br from-green-900/20 to-green-800/10 rounded-2xl p-8 border border-green-500/30">
+          <h3 className="text-2xl font-bold mb-6 text-green-400">Why This Works</h3>
+          <ul className="space-y-4 text-zinc-300">
             <li className="flex items-start gap-3">
-              <span className="text-green-500 mt-1">✓</span>
+              <span className="text-green-500 mt-1 text-xl">✓</span>
               <span>Trading volume directly benefits NFT and token holders through buybacks and burns</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-500 mt-1">✓</span>
+              <span className="text-green-500 mt-1 text-xl">✓</span>
               <span>Floor price support prevents downside crashes during market uncertainty</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-500 mt-1">✓</span>
+              <span className="text-green-500 mt-1 text-xl">✓</span>
               <span>Token supply reduction creates scarcity and potential for appreciation</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-green-500 mt-1">✓</span>
+              <span className="text-green-500 mt-1 text-xl">✓</span>
               <span>Fully automated - no human intervention required</span>
             </li>
           </ul>
