@@ -11,7 +11,7 @@ const StrategyMiniApp = () => {
 
   useEffect(() => {
     calculateMetrics();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const calculateMetrics = () => {
     const buybackProgress = Math.min(1, Math.max(0, data.treasury.eth_balance / data.treasury.target_eth_per_buyback));
@@ -127,8 +127,8 @@ const HomeView = ({ data, derived }) => {
         <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${derived.buybackProgressPercent}%` }}
+            initial={{ width: "0%" }}
+            animate={{ width: `${derived.buybackProgressPercent || 0}%` }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           />
         </div>
