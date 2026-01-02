@@ -509,10 +509,10 @@ const CoinGeckoTerminal = () => {
           <button 
             onClick={fetchCryptoData}
             disabled={isLoading}
-            className="p-1.5 hover:bg-gray-100 rounded-md transition-colors disabled:opacity-50"
+            className="p-2 hover:bg-gray-100 rounded-full transition-all duration-200 disabled:opacity-50"
             title="Refresh"
           >
-            <RefreshCw className={`w-4 h-4 text-gray-500 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-gray-400 stroke-[1.5] ${isLoading ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
@@ -526,7 +526,7 @@ const CoinGeckoTerminal = () => {
           {cryptoData.map((coin) => (
             <div 
               key={coin.id} 
-              className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors rounded-md px-2 -mx-2"
+              className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-all duration-200 rounded-xl px-3 -mx-3"
             >
               <div className="flex items-center gap-3">
                 <img 
@@ -536,20 +536,20 @@ const CoinGeckoTerminal = () => {
                 />
                 <div>
                   <p className="text-sm font-semibold text-gray-900">{coin.name}</p>
-                  <p className="text-xs text-gray-500 uppercase">{coin.symbol}</p>
+                  <p className="text-xs text-gray-400 uppercase">{coin.symbol}</p>
                 </div>
               </div>
               <div className="text-right">
                 <p className="text-sm font-bold text-gray-900">{formatPrice(coin.current_price)}</p>
                 <p className={`text-xs font-medium ${
-                  coin.price_change_percentage_24h >= 0 ? 'text-green-600' : 'text-red-600'
+                  coin.price_change_percentage_24h >= 0 ? 'text-emerald-500' : 'text-red-500'
                 }`}>
                   {coin.price_change_percentage_24h >= 0 ? '+' : ''}
                   {coin.price_change_percentage_24h?.toFixed(2)}%
                 </p>
               </div>
               <div className="text-right hidden sm:block">
-                <p className="text-xs text-gray-500">Market Cap</p>
+                <p className="text-xs text-gray-400">Market Cap</p>
                 <p className="text-sm font-medium text-gray-700">{formatMarketCap(coin.market_cap)}</p>
               </div>
             </div>
@@ -562,9 +562,9 @@ const CoinGeckoTerminal = () => {
           href="https://www.coingecko.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1"
+          className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors duration-200"
         >
-          Powered by CoinGecko <ExternalLink className="w-3 h-3" />
+          Powered by CoinGecko <ExternalLink className="w-3 h-3 stroke-[1.5]" />
         </a>
       </div>
     </div>
