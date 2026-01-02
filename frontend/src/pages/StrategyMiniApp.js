@@ -571,62 +571,208 @@ const CoinGeckoTerminal = () => {
 
 // Stats View
 const StatsView = ({ data, derived }) => {
+  // Generate more detailed history data
+  const performanceData = data.history.map((h, idx) => ({
+    ...h,
+    profit: ((h.floor - h.strategy_buy) * 100 / h.strategy_buy).toFixed(1)
+  }));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-5"
       data-testid="stats-view"
     >
       {/* CoinGecko Terminal */}
       <CoinGeckoTerminal />
       
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
-          <p className="text-xs text-gray-400 mb-2 font-medium">ETH in Treasury</p>
-          <p className="text-3xl font-bold text-gray-900">{data.treasury.eth_balance} ETH</p>
+      {/* Key Metrics - Compact Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="p-1.5 bg-blue-50 rounded-lg">
+              <Wallet className="w-4 h-4 text-blue-500 stroke-[1.5]" />
+            </div>
+            <p className="text-xs text-gray-400 font-medium">Treasury</p>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{data.treasury.eth_balance} ETH</p>
+          <p className="text-xs text-emerald-500 mt-1 flex items-center gap-1">
+            <ArrowUpRight className="w-3 h-3" /> Target: {data.treasury.target_eth_per_buyback} ETH
+          </p>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
-          <p className="text-xs text-gray-400 mb-2 font-medium">Market Gap</p>
-          <p className="text-3xl font-bold text-emerald-500">+{derived.gapETH?.toFixed(3)} ETH</p>
+        
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="p-1.5 bg-emerald-50 rounded-lg">
+              <TrendingUp className="w-4 h-4 text-emerald-500 stroke-[1.5]" />
+            </div>
+            <p className="text-xs text-gray-400 font-medium">Market Gap</p>
+          </div>
+          <p className="text-2xl font-bold text-emerald-500">+{derived.gapETH?.toFixed(3)} ETH</p>
           <p className="text-xs text-gray-400 mt-1">{derived.gapPercent?.toFixed(1)}% below floor</p>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
-          <p className="text-xs text-gray-400 mb-2 font-medium flex items-center gap-1">
-            <Flame className="w-3.5 h-3.5 text-orange-400 stroke-[1.5]" /> Burned
-          </p>
-          <p className="text-3xl font-bold text-gray-900">{data.nft_supply.burned}</p>
-          <p className="text-xs text-gray-400 mt-1">{derived.burnRatio?.toFixed(1)}% of supply</p>
+        
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="p-1.5 bg-orange-50 rounded-lg">
+              <Flame className="w-4 h-4 text-orange-500 stroke-[1.5]" />
+            </div>
+            <p className="text-xs text-gray-400 font-medium">Burned</p>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{data.nft_supply.burned}</p>
+          <p className="text-xs text-orange-500 mt-1">{derived.burnRatio?.toFixed(1)}% of supply</p>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="p-1.5 bg-purple-50 rounded-lg">
+              <Target className="w-4 h-4 text-purple-500 stroke-[1.5]" />
+            </div>
+            <p className="text-xs text-gray-400 font-medium">Strategy Control</p>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{derived.strategyControl?.toFixed(1)}%</p>
+          <p className="text-xs text-gray-400 mt-1">{data.nft_supply.strategy_owned} NFTs owned</p>
         </div>
       </div>
 
-      {/* Price Chart */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">Price History</h3>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={data.history}>
-            <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '11px' }} />
-            <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }} />
-            <RechartsTooltip
-              contentStyle={{ backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '12px', fontSize: '12px', padding: '10px' }}
-            />
-            <Line type="monotone" dataKey="floor" stroke="#3b82f6" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="strategy_buy" stroke="#10b981" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Price Chart */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-gray-900">Price History</h3>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="flex items-center gap-1"><span className="w-2 h-2 bg-blue-500 rounded-full"></span> Floor</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 bg-emerald-500 rounded-full"></span> Strategy Buy</span>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={data.history}>
+              <defs>
+                <linearGradient id="colorFloor" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorStrategy" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '10px' }} tickLine={false} axisLine={false} />
+              <YAxis stroke="#9ca3af" style={{ fontSize: '10px' }} tickLine={false} axisLine={false} />
+              <RechartsTooltip
+                contentStyle={{ backgroundColor: '#fff', border: '1px solid #f3f4f6', borderRadius: '12px', fontSize: '11px', padding: '8px' }}
+              />
+              <Area type="monotone" dataKey="floor" stroke="#3b82f6" strokeWidth={2} fill="url(#colorFloor)" />
+              <Area type="monotone" dataKey="strategy_buy" stroke="#10b981" strokeWidth={2} fill="url(#colorStrategy)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Activity Summary */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Activity Summary</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-100 rounded-lg">
+                  <ArrowUpRight className="w-4 h-4 text-emerald-600 stroke-[1.5]" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">NFTs Bought</p>
+                  <p className="text-xs text-gray-400">Total acquisitions</p>
+                </div>
+              </div>
+              <p className="text-lg font-bold text-gray-900">{data.activity.nft_bought_total}</p>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <ArrowDownRight className="w-4 h-4 text-red-600 stroke-[1.5]" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">NFTs Sold</p>
+                  <p className="text-xs text-gray-400">Total sales</p>
+                </div>
+              </div>
+              <p className="text-lg font-bold text-gray-900">{data.activity.nft_sold_total}</p>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Activity className="w-4 h-4 text-blue-600 stroke-[1.5]" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">ETH Spent</p>
+                  <p className="text-xs text-gray-400">On buybacks</p>
+                </div>
+              </div>
+              <p className="text-lg font-bold text-gray-900">{data.activity.eth_spent_on_buybacks} ETH</p>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <Zap className="w-4 h-4 text-amber-600 stroke-[1.5]" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">ETH Received</p>
+                  <p className="text-xs text-gray-400">From sales</p>
+                </div>
+              </div>
+              <p className="text-lg font-bold text-gray-900">{data.activity.eth_received_from_sales} ETH</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Orderbook */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">Orderbook</h3>
-        <div className="space-y-0 divide-y divide-gray-100">
-          {data.orderbook.map((order, idx) => (
-            <div key={idx} className="flex justify-between items-center py-3 hover:bg-gray-50 transition-all duration-200 rounded-xl px-2 -mx-2">
-              <span className="text-sm text-gray-500 font-medium">{order.price} ETH</span>
-              <span className="text-sm font-semibold text-gray-900">{order.count} NFTs</span>
-            </div>
-          ))}
+      {/* Bottom Row - Orderbook and Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Orderbook */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Orderbook</h3>
+          <div className="space-y-2">
+            {data.orderbook.map((order, idx) => (
+              <div key={idx} className="flex items-center gap-3">
+                <div className="flex-1 bg-emerald-50 rounded-full h-2 overflow-hidden">
+                  <div 
+                    className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                    style={{ width: `${(order.count / Math.max(...data.orderbook.map(o => o.count))) * 100}%` }}
+                  />
+                </div>
+                <span className="text-sm font-medium text-gray-700 w-20">{order.price} ETH</span>
+                <span className="text-sm font-bold text-gray-900 w-16 text-right">{order.count} NFTs</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Fee Distribution */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Fee Distribution</h3>
+          <div className="space-y-3">
+            {[
+              { label: 'NFT Buyback', value: data.distribution.buyback_nft_pct, color: 'bg-emerald-500' },
+              { label: 'Token Buyback', value: data.distribution.buyback_token_pct, color: 'bg-blue-500' },
+              { label: 'Liquidity', value: data.distribution.liquidity_pct, color: 'bg-purple-500' },
+              { label: 'Development', value: data.distribution.dev_pct, color: 'bg-amber-500' }
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center gap-3">
+                <div className={`w-3 h-3 ${item.color} rounded-full`} />
+                <span className="text-sm text-gray-600 flex-1">{item.label}</span>
+                <div className="w-24 bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div 
+                    className={`h-full ${item.color} rounded-full`}
+                    style={{ width: `${item.value}%` }}
+                  />
+                </div>
+                <span className="text-sm font-bold text-gray-900 w-12 text-right">{item.value}%</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>
