@@ -125,6 +125,7 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 - ✅ MetaMask error handling verified
 
 ## Known Limitations
-- **MOCKED**: Strategy data is from static JSON file
-- **MOCKED**: Wallet connection doesn't persist sessions
+- **BACKEND DATA**: Strategy data now comes from backend API (default values if not in MongoDB)
+- **MOCKED**: Wallet connection doesn't persist sessions in DB yet
 - MetaMask testing requires browser extension
+- CoinGecko API may have rate limits (30 calls/min for free tier)
