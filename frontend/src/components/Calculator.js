@@ -144,7 +144,7 @@ export const Calculator = () => {
                     <input
                       type="number"
                       value={inputs.dev_percentage}
-                      onChange=(e) => handleInputChange('dev_percentage', e.target.value)}
+                      onChange={(e) => handleInputChange('dev_percentage', e.target.value)}
                       className="input-brutal w-full px-3 py-2 text-base rounded-none"
                     />
                   </div>
