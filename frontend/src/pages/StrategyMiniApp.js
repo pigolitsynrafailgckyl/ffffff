@@ -282,6 +282,135 @@ const HomeView = ({ data, derived }) => {
   );
 };
 
+// CoinGecko Terminal Component
+const CoinGeckoTerminal = () => {
+  const [cryptoData, setCryptoData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [lastUpdate, setLastUpdate] = useState(null);
+
+  const fetchCryptoData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum,bitcoin,solana&order=market_cap_desc&sparkline=false&price_change_percentage=24h'
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch crypto data');
+      }
+      
+      const data = await response.json();
+      setCryptoData(data);
+      setLastUpdate(new Date());
+      setError(null);
+    } catch (err) {
+      setError('Не удалось загрузить данные');
+      console.error('CoinGecko API error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCryptoData();
+    const interval = setInterval(fetchCryptoData, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, [fetchCryptoData]);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(price);
+  };
+
+  const formatMarketCap = (cap) => {
+    if (cap >= 1e12) return `$${(cap / 1e12).toFixed(2)}T`;
+    if (cap >= 1e9) return `$${(cap / 1e9).toFixed(2)}B`;
+    return `$${(cap / 1e6).toFixed(2)}M`;
+  };
+
+  return (
+    <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6" data-testid="coingecko-terminal">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-green-600" />
+          <h3 className="text-sm font-semibold text-gray-900">Market Terminal</h3>
+        </div>
+        <div className="flex items-center gap-2">
+          {lastUpdate && (
+            <span className="text-xs text-gray-400">
+              Updated: {lastUpdate.toLocaleTimeString()}
+            </span>
+          )}
+          <button 
+            onClick={fetchCryptoData}
+            disabled={isLoading}
+            className="p-1.5 hover:bg-gray-100 rounded-md transition-colors disabled:opacity-50"
+            title="Refresh"
+          >
+            <RefreshCw className={`w-4 h-4 text-gray-500 ${isLoading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+      </div>
+
+      {error ? (
+        <div className="text-center py-4 text-gray-500 text-sm">{error}</div>
+      ) : isLoading && cryptoData.length === 0 ? (
+        <div className="text-center py-4 text-gray-500 text-sm">Loading...</div>
+      ) : (
+        <div className="space-y-3">
+          {cryptoData.map((coin) => (
+            <div 
+              key={coin.id} 
+              className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors rounded-md px-2 -mx-2"
+            >
+              <div className="flex items-center gap-3">
+                <img 
+                  src={coin.image} 
+                  alt={coin.name} 
+                  className="w-8 h-8 rounded-full"
+                />
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">{coin.name}</p>
+                  <p className="text-xs text-gray-500 uppercase">{coin.symbol}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-bold text-gray-900">{formatPrice(coin.current_price)}</p>
+                <p className={`text-xs font-medium ${
+                  coin.price_change_percentage_24h >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {coin.price_change_percentage_24h >= 0 ? '+' : ''}
+                  {coin.price_change_percentage_24h?.toFixed(2)}%
+                </p>
+              </div>
+              <div className="text-right hidden sm:block">
+                <p className="text-xs text-gray-500">Market Cap</p>
+                <p className="text-sm font-medium text-gray-700">{formatMarketCap(coin.market_cap)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      <div className="mt-4 pt-4 border-t border-gray-100">
+        <a 
+          href="https://www.coingecko.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1"
+        >
+          Powered by CoinGecko <ExternalLink className="w-3 h-3" />
+        </a>
+      </div>
+    </div>
+  );
+};
+
 // Stats View
 const StatsView = ({ data, derived }) => {
   return (
@@ -291,6 +420,9 @@ const StatsView = ({ data, derived }) => {
       className="space-y-6"
       data-testid="stats-view"
     >
+      {/* CoinGecko Terminal */}
+      <CoinGeckoTerminal />
+      
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
