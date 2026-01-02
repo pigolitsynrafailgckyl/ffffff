@@ -108,9 +108,11 @@ Create "Forma Strategy" project, conceptually similar to "NFT Strategy" and "Pun
 ```
 
 ## Key API Endpoints (Backend)
+- GET /api/strategy/state - Full strategy state for mini-app (NEW)
 - GET /api/stats - Strategy statistics
 - GET /api/nfts - NFT listings
 - GET /api/transactions - Transaction history
+- GET /api/crypto/price/{coin_id} - CoinGecko price data
 
 ## External Integrations
 - **CoinGecko API**: Public API for crypto prices (no key required)
