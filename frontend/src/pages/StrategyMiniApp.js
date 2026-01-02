@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
-import { Home, BarChart3, ShoppingBag, Trophy, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw, AlertCircle, LogOut, CheckCircle } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { Home, BarChart3, ShoppingBag, Info, Flame, TrendingUp, Wallet, ExternalLink, RefreshCw, AlertCircle, LogOut, CheckCircle, Star, Eye, ChevronRight, Search, Filter, ArrowUpRight, ArrowDownRight, Zap, Target, Activity } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
