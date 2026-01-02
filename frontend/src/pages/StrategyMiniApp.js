@@ -249,8 +249,7 @@ const StrategyMiniApp = () => {
   const navItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'stats', icon: BarChart3, label: 'Stats' },
-    { id: 'nfts', icon: ShoppingBag, label: 'NFTs' },
-    { id: 'leaderboard', icon: Trophy, label: 'Leaderboard' }
+    { id: 'nfts', icon: ShoppingBag, label: 'NFTs' }
   ];
 
   return (
