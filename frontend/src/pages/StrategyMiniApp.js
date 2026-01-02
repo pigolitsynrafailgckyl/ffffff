@@ -682,6 +682,14 @@ const StrategyMiniApp = () => {
           </>
         ) : null}
       </main>
+
+      {/* Strategy Detail Modal */}
+      <StrategyDetailModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        nft={selectedNft}
+        strategyData={data}
+      />
     </div>
   );
 };
