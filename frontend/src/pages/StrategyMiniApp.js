@@ -334,6 +334,10 @@ const StrategyMiniApp = () => {
   const [authToken, setAuthToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNft, setSelectedNft] = useState(null);
+
   // Fetch strategy data from backend API
   const fetchStrategyData = useCallback(async () => {
     try {
